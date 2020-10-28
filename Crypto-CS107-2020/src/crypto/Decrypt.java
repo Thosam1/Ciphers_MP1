@@ -181,6 +181,7 @@ public class Decrypt {
 	//-----------------------Vigenere-------------------------
 	// Algorithm : see  https://www.youtube.com/watch?v=LaWp_Kq0cKs	
 	/**
+	 * 
 	 * Method to decode a byte array encoded following the Vigenere pattern, but in a clever way, 
 	 * saving up on large amounts of computations
 	 * @param cipher the byte array representing the encoded text
@@ -188,7 +189,12 @@ public class Decrypt {
 	 */
 	public static byte[] vigenereWithFrequencies(byte[] cipher) {
 		//TODO : COMPLETE THIS METHOD
-		return null; //TODO: to be modified
+		List<Byte> spaceRemoved = removeSpaces(cipher);	
+		int keyLength = vigenereFindKeyLength(spaceRemoved);
+		byte[] key = vigenereFindKey(spaceRemoved, keyLength);
+		byte[] vigenereCracked = Encrypt.vigenere(cipher, key, false); //if false, spaces are not encoded/decoded
+		
+		return vigenereCracked; //TODO: to be modified
 	}
 	
 	
@@ -200,7 +206,13 @@ public class Decrypt {
 	 */
 	public static List<Byte> removeSpaces(byte[] array){
 		//TODO : COMPLETE THIS METHOD
-		return null;
+		List<Byte> list = new ArrayList<Byte>();
+		for(int i = 0; i < array.length; i++) { //adding all non spaces values to <byte> list
+			if(array[i] != 32) {
+				list.add(array[i]);
+			}
+		}
+		return list;
 	}
 	
 	
@@ -211,11 +223,89 @@ public class Decrypt {
 	 */
 	public static int vigenereFindKeyLength(List<Byte> cipher) {
 		//TODO : COMPLETE THIS METHOD
-		return -1; //TODO: to be modified
+		int length = cipher.size();
+		int coincidence[] = new int[length - 1]; //coincidence[0] would be the number of coincidences between line 0 and line 1, [length-1] would be between line 0 and line length-1
+		
+		
+		// remplissage tableau coincidence
+		for(int i = 0; i < coincidence.length; i++) { //change lines
+			int coincid = 0;
+			for(int j = 0; j < length -1 - i; j++) { //as line is more décalé, the number of iteration per line decreases //second line 
+				if(cipher.get(j) == cipher.get(j+i+1)) { // the second line always starts at index 0 (j loop), the first line starts at index i+1 
+					coincid += 1;
+				}
+			}
+			coincidence[i] = coincid;
+		}
+		
+		System.out.println("Coincidences for decryption");
+		for(int i = 0; i < coincidence.length; i++) {										//Debugging Seems to have about 20 (many) coincidences for every line
+			System.out.println(coincidence[i]);
+		}																					
+		
+		// calcul des maximums locaux et taille de cle potentielle 
+		int half;
+		if(coincidence.length %2 == 0) {
+			half = coincidence.length / 2;
+		}else {
+			half = (coincidence.length+1) /2;
+		}
+		
+		List<Integer> stock = new ArrayList<Integer>();		// stocker l'indice des maximums locaux dans une ArrayList stock
+		
+		if(maxAfter(coincidence[0], coincidence[1], coincidence[2], 0, 0) == true) { //index 0
+			stock.add(0);
+		}
+		if(maxAfter(coincidence[1], coincidence[2], coincidence[3], coincidence[0], 0) == true) { //index 1
+			stock.add(1);
+		}
+		for(int k = 2; k <= half-3; k++) { // general cases
+			if(maxAfter(coincidence[k], coincidence[k-2], coincidence[k-1], coincidence[k+1], coincidence[k+2]) == true) {
+				stock.add(k);
+			}
+		}
+		if(maxAfter(coincidence[half-2], coincidence[half-3], coincidence[half-4], coincidence[half-1], 0) == true) { //index length-2
+			stock.add(half-2);
+		}
+		if(maxAfter(coincidence[half-1], coincidence[half-2], coincidence[half-3], 0, 0) == true) { //index length-1
+			stock.add(half-1);
+		}
+		// --------------------
+		
+		//Calcul de la taille potentielle de la clé, stocker et comparer les nombres de décalge qui reviennent le plus souvent
+		int bonds[] = new int[40];  // stocker le nombre de bonds pour des keys de longueurs 0 à 40
+		for(int l = 0; l < stock.size() - 1; l++) {
+			int jump = stock.get(l+1) - stock.get(l); //le nombre de saut selon les indices des maximums locaux
+			bonds[jump] += 1;
+		}
+		//Trouver le saut qui survient le plus
+		int maxKey = 0;
+		for(int m = 0; m < bonds.length; m++) {
+			if(bonds[m] > maxKey) {
+				maxKey = m; //the indice of jump that occurs most is stored
+			}
+		}
+		
+		return maxKey; //TODO: to be modified
 	}
 
 	
 	
+	private static boolean maxAfter(int actual, int one, int two, int three, int four) { //true if actual is the maximum with the four after, use 0 if non existent
+		// TODO Auto-generated method stub
+		int firstMax = Math.max(actual, one);
+		int secondMax = Math.max(actual, two);
+		int thirdMax = Math.max(actual, three);
+		int fourthMax = Math.max(actual, four);
+		if(firstMax == secondMax && secondMax == thirdMax && thirdMax == fourthMax) {
+			return true;
+		}else {
+			return false;
+		}
+		
+	}
+
+
 	/**
 	 * Takes the cipher without space, and the key length, and uses the dot product with the English language frequencies 
 	 * to compute the shifting for each letter of the key
@@ -223,9 +313,37 @@ public class Decrypt {
 	 * @param keyLength the length of the key we want to find
 	 * @return the inverse key to decode the Vigenere cipher text
 	 */
-	public static byte[] vigenereFindKey(List<Byte> cipher, int keyLength) {
+	public static byte[] vigenereFindKey(List<Byte> cipher, int keyLength) { //would be nice to add the spaces at their respective indexes again...
 		//TODO : COMPLETE THIS METHOD
-		return null; //TODO: to be modified
+		int remainder = cipher.size() % keyLength; //number of iterations on the last, optional
+		int multiple = Math.floorDiv(cipher.size(), keyLength); //number of iterations
+		byte caesarTables[][] = new byte[keyLength][multiple + 1]; //first dimension is the index of table, second dimension will be the characters of the table in order
+		//you can say the second dim size is multiple + 1 (for remainder) since caesarWtihFrequencies will take care of spaces
+		
+		for(int p = 0; p < multiple; p++) { //for multiple
+			for(int q = 0; q < keyLength; q++) {
+				caesarTables[q][p] = cipher.get(p*keyLength + q);
+			}
+		}
+		for(int r = 0; r < remainder; r++){// for remainder
+			caesarTables[r][multiple] = cipher.get(multiple * keyLength + r);
+		}
+		for(int s = 0; s < keyLength-remainder; s++) {//fill remainder with spaces
+			caesarTables[s+remainder][multiple] = 32; //32 is space in byte
+		}
+		
+		//so at the end we get n(keyLength) tableaux, perform caesare frequency on each of them to find the respective key, then add all together in a byte array.
+		byte[] respectiveKey = new byte[keyLength];
+		for(int s = 0; s < keyLength; s++) {
+			
+			respectiveKey[s] = caesarWithFrequencies(caesarTables[s]);
+		}
+		
+//		byte[] inverseKey = new byte[respectiveKey.length]; //inverse the key
+//		for(int i = 0; i < respectiveKey.length; i ++) {
+//			inverseKey[i] = (byte) -respectiveKey[i];
+//		}
+		return respectiveKey; //TODO: to be modified
 	}
 	
 	
