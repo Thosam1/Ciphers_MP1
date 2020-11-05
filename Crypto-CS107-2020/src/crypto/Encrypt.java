@@ -57,74 +57,74 @@ public class Encrypt {
 	
 	
 	//-----------------------Caesar-------------------------
-	
-	/**
-	 * Method to encode a byte array message using a single character key
-	 * the key is simply added to each byte of the original message
-	 * @param plainText The byte array representing the string to encode
-	 * @param key the byte corresponding to the char we use to shift
-	 * @param spaceEncoding if false, then spaces are not encoded
-	 * @return an encoded byte array
-	 */
-	public static byte[] caesar(byte[] plainText, byte key, boolean spaceEncoding) {
-		assert(plainText != null);
-		// TODO: COMPLETE THIS METHOD
-		byte[] newkey = new byte[] {key};
-		return byteArrayPlusKeys(plainText, newkey, spaceEncoding);
-		
-	}
-	
-	public static byte[] byteArrayPlusKeys(byte[] plainText, byte[] keyArray, boolean spaceEncoding) {	
-		byte[] encodedText = new byte[plainText.length];
-		int encryptedCharacters =0;
-		for (int i=0; i<plainText.length; i++) {
-			if (plainText[i] == 32) {
-				if(spaceEncoding){
+
+		/**
+		 * Method to encode a byte array message using a single character key
+		 * the key is simply added to each byte of the original message
+		 * @param plainText The byte array of the string to encrypt
+		 * @param key the byte corresponding to the char we use to shift
+		 * @param spaceEncoding Boolean variable that determines if spaces are encrypted
+		   (if false, they are not encrypted)
+		 * @return an encoded byte array
+		 */
+		public static byte[] caesar(byte[] plainText, byte key, boolean spaceEncoding) {
+			assert(plainText != null); //error if plainText is null
+
+			byte[] newkey = new byte[] {key}; //creating a byte array with @param key as unique entry
+			return byteArrayPlusKeys(plainText, newkey, spaceEncoding); //byteArrayPlusKeys adds the value of the key to every byte in -plainText-
+		}
+
+	//=========================================================================================================
+
+	/**Method that encrypts a byte input with a byte key and returns the encrypted message as a byte array
+	 * @param plainText The byte array of the string to encrypt
+	 * @param keyArray The byte array that is looped to encrypt each value(spaces may or may not be encrypted)
+	   in plainText
+	 * @param spaceEncoding Boolean variable which determines if spaces are encrypted or not
+	*/
+		public static byte[] byteArrayPlusKeys(byte[] plainText, byte[] keyArray, boolean spaceEncoding) {
+			byte[] encodedText = new byte[plainText.length];
+
+			int encryptedCharacters =0; // This integer is very important for vigenere because it decides which index of the key array is used
+			for (int i=0; i<plainText.length; i++) {
+				if (plainText[i] == 32) { //The byte value 32 corresponds to spaces
+
+					if(spaceEncoding){ //If true, spaces are encrypted
+						encodedText[i] = bytePlusKey(i, encryptedCharacters, plainText, keyArray);
+						encryptedCharacters +=1; //allows the method -bytePlusKey- to encrypt the next character in -plainText- with the next value in -KeyArray-
+					}
+					else {
+						encodedText[i] = plainText[i]; //encrypted value set to 32 (stays a space because spaceEncoding is false)
+					}
+				}
+
+				else { //if the byte is not equal to 32
 					encodedText[i] = bytePlusKey(i, encryptedCharacters, plainText, keyArray);
 					encryptedCharacters +=1;
 				}
-				else {
-					encodedText[i] = plainText[i];
-				}
 			}
-			else {
-				encodedText[i] = bytePlusKey(i, encryptedCharacters, plainText, keyArray);
-				encryptedCharacters +=1;
-			}
+
+			return encodedText;
 		}
-		
-		return encodedText;
-	}
-	
-	public static byte bytePlusKey(int i, int encryptedCharacters, byte[] plainText, byte[] keyArray) {
-		int keyIndex = encryptedCharacters%(keyArray.length);
-		byte byteValue = plainText[i];
-		
-		int encryptedByteValue = byteValue + keyArray[keyIndex];
-		if (encryptedByteValue < -128) {
-			encryptedByteValue = 256 + encryptedByteValue;
-		}
-		else if (encryptedByteValue>127){
-			encryptedByteValue = encryptedByteValue - 256;
-		}
-		return (byte) encryptedByteValue;
-	}
 
 
-	
+	//=========================================================================================================
 	/**
-	 * Method to encode a byte array message  using a single character key
-	 * the key is simply added  to each byte of the original message
-	 * spaces are not encoded
+	 * This method takes 4 parameters
+	 * @param i The integer representing the index of the value in @param plainText that is being encrypted
+	 * @param encryptedCharacters The integer representing the number of characters that have been encrypted
 	 * @param plainText The byte array representing the string to encode
-	 * @param key the byte corresponding to the char we use to shift
-	 * @return an encoded byte array
-	 */
-	public static byte[] caesar(byte[] plainText, byte key) {
-		// TODO: COMPLETE THIS METHOD
-		return caesar(plainText, key, false);
+	 * @param keyArray The byte array that is used as the key for Caesar and Vigenere
+	*/
+		public static byte bytePlusKey(int i, int encryptedCharacters, byte[] plainText, byte[] keyArray) {
+			int keyIndex = encryptedCharacters%(keyArray.length); /*for Caesar this value is always equal to 0
+																														  for Vigenere it cycles between 0 and the length of the keyArray*/
+			byte byteValue = plainText[i]; //byte value in -plainText- that is being encrypted
 
-	}
+			int encryptedByteValue = byteValue + keyArray[keyIndex];
+
+			return (byte) encryptedByteValue;
+		}
 	
 	//-----------------------XOR-------------------------
 	
