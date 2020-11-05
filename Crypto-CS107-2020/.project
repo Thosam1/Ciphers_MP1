@@ -14,4 +14,11 @@
 	<natures>
 		<nature>org.eclipse.jdt.core.javanature</nature>
 	</natures>
+	<linkedResources>
+		<link>
+			<name>res/challenge-encrypted.bin</name>
+			<type>1</type>
+			<location>C:/Users/Colette/Downloads/challenge-encrypted.bin</location>
+		</link>
+	</linkedResources>
 </projectDescription>

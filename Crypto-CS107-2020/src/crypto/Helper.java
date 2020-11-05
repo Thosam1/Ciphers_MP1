@@ -10,6 +10,9 @@ import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.nio.charset.StandardCharsets;
 
+//import java.io.File;
+import java.nio.file.Files;
+
 public class Helper {
 	private static final String SEP = File.separator;
 	private static final String RES_PATH_HEADER = "res" + SEP;
@@ -113,5 +116,55 @@ public class Helper {
 		  
 	}
 	
+	/**
+	 * Method to read a file into a byte array
+	 * @param fileName the name of the file
+	 */
+	public static byte[] readBytesFromFile(String fileName) {
+		byte[] message = null;
+		try {
+			File f = new File(RES_PATH_HEADER + fileName);
+			if(!f.exists()) {
+				return null;
+			}
+			message = Files.readAllBytes(f.toPath());
+		
+	  } catch (IOException e) {
+		  e.printStackTrace();
+	  }
+		
+		return message;
+	}
 	
+	/**
+	 * Method to write byte array into a File, we can choose between appending or not at the end of file.
+	 * @param message  array we want to write
+	 * @param fileName the name of the file
+	 * @param append indicate if we should append or not
+	 */
+	public static void writeBytesToFile(byte[] message, String fileName, boolean append) {
+		try {
+			File f = new File(RES_PATH_HEADER + fileName);
+			if (!append) { f.delete(); }
+			if(!f.exists()) {
+				f.createNewFile();
+			}
+		FileOutputStream fos = new FileOutputStream(f);
+		fos.write(message);
+		fos.close();
+		
+	  } catch (IOException e) {
+		  e.printStackTrace();
+	  }
+	}
+	
+	/**
+	 * Write a byte array to a file, clears the file each time it is called
+	 * @param message the array to write
+	 * @param fileName the name of the file
+	 */
+	public static void writeBytesToFile(byte[] message, String fileName) {
+		writeBytesToFile(message, fileName, false);
+	}
+
 }

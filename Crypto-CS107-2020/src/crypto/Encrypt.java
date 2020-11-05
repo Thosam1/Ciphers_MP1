@@ -13,7 +13,7 @@ public class Encrypt {
 	
 	public static final byte SPACE = 32;
 	
-	final static Random rand = new Random();
+	final static Random rand = new Random(2l);
 	
 	//-----------------------General-------------------------
 	
@@ -76,26 +76,28 @@ public class Encrypt {
 	
 	public static byte[] byteArrayPlusKeys(byte[] plainText, byte[] keyArray, boolean spaceEncoding) {	
 		byte[] encodedText = new byte[plainText.length];
-		
+		int encryptedCharacters =0;
 		for (int i=0; i<plainText.length; i++) {
 			if (plainText[i] == 32) {
 				if(spaceEncoding){
-					encodedText[i] = bytePlusKey(i, plainText, keyArray);
+					encodedText[i] = bytePlusKey(i, encryptedCharacters, plainText, keyArray);
+					encryptedCharacters +=1;
 				}
 				else {
 					encodedText[i] = plainText[i];
 				}
 			}
 			else {
-				encodedText[i] = bytePlusKey(i, plainText, keyArray);
+				encodedText[i] = bytePlusKey(i, encryptedCharacters, plainText, keyArray);
+				encryptedCharacters +=1;
 			}
 		}
 		
 		return encodedText;
 	}
 	
-	public static byte bytePlusKey(int i, byte[] plainText, byte[] keyArray) {
-		int keyIndex = i%(keyArray.length);
+	public static byte bytePlusKey(int i, int encryptedCharacters, byte[] plainText, byte[] keyArray) {
+		int keyIndex = encryptedCharacters%(keyArray.length);
 		byte byteValue = plainText[i];
 		
 		int encryptedByteValue = byteValue + keyArray[keyIndex];
@@ -279,7 +281,73 @@ public class Encrypt {
 				if(mod != 0){ // i don't know if that if statement is rlly necessary
 					for(int k = 0; k < mod; k ++){
 						array1[max*sub.length + k] = (byte) (plainText[max*sub.length + k] ^ sub[k]); //handle the remainder 
+					} //same code for encoding and decoding
+				}
+				
+							
+				return array1; // TODO: to be modified
+		}
+	}
+	
+	public static byte[] encryptAdvancedCBC(byte[] plainText, byte[] iv, byte xor) {
+		// TODO: COMPLETE THIS METHOD
+		byte[] encrypted = chooseAdvancedCBC(plainText, iv, xor, false);
+		return encrypted;
+
+	}
+
+	
+	public static byte[] chooseAdvancedCBC(byte[] plainText, byte[] iv, byte xor, boolean decrypt) { //cbc with an additional xor between each line
+		
+		byte[] array1 = new byte[plainText.length]; // we initialize a byte array of same length as plaintext, we will return it at the end
+		int max = Math.floorDiv(plainText.length, iv.length); // we  get the number of iteration of "Otp" needed
+		int mod = plainText.length % iv.length; // important to know when to stop in the final loop
+		byte[] sub = new byte[iv.length]; // it will be easier to store the data in that array for each iteration, we could delete it but i made it so it is easier to understand the code
+		
+		if(max == 0){ //only iterate until remainder // This is ontTimePad (length of pad greater than length of text)
+			array1 = oneTimePad(plainText, iv);
+			for(int i = 0; i < array1.length; i ++) {
+				array1[i] = (byte) (array1[i] ^ xor);
+			}			
+			return array1;
+		}else { // length text is greater or equal to pad - so it will be one iteration at least
+			
+	
+				for(int i = 0; i < sub.length; i++){ // this is to copy values into sub[i], in C you would do it like that, so just in case to be sure it works
+					sub[i] = iv[i];
+				}
+						
+				for(int i = 0; i < max; i++){ // macro loop to iterate a smaller loop, max time a smaller loop
+	
+					for(int j = 0; j < sub.length; j++){ // handle all the iterations
+							
+						if(decrypt == false) { //to encrypt
+							array1[i*sub.length + j] = (byte) (plainText[i*sub.length + j] ^ sub[j]);
+							array1[i*sub.length + j] = (byte) (array1[i*sub.length + j] ^ xor); //we do xorAfter
+							sub[j] = array1[i*sub.length + j];
+						}else { //to decrypt
+							array1[i*sub.length + j] = (byte) (plainText[i*sub.length + j] ^ xor); //we do xorBefore
+							array1[i*sub.length + j] = (byte) (array1[i*sub.length + j] ^ sub[j]);
+							sub[j] = plainText[i*sub.length + j];
+						}					
+							
+					}			
+	
+				}
+	
+				if(mod != 0){ // i don't know if that if statement is rlly necessary
+					if(decrypt == false) {
+						for(int k = 0; k < mod; k ++){
+							array1[max*sub.length + k] = (byte) (plainText[max*sub.length + k] ^ sub[k]); //handle the remainder 
+							array1[max*sub.length + k] = (byte) (array1[max*sub.length + k] ^ xor);
+						}
+					}else {
+						for(int k = 0; k < mod; k ++){
+							array1[max*sub.length + k] = (byte) (plainText[max*sub.length + k] ^ xor);
+							array1[max*sub.length + k] = (byte) (array1[max*sub.length + k] ^ sub[k]); //handle the remainder 
+						}
 					}
+					
 				}
 				
 							

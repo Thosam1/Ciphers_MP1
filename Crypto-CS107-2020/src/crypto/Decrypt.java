@@ -11,6 +11,16 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.sun.tools.javac.util.Context.Key;
+
+import java.io.BufferedReader;
+
+import java.io.FileInputStream; // Import the File class
+import java.io.IOException; // Import this class to handle errors
+import java.io.InputStreamReader; // Import this class to read text files
+
+
+
 public class Decrypt {
 	
 	
@@ -169,7 +179,7 @@ public class Decrypt {
 		byte[][] xor_possibilities = new byte[256][];
 		for(int i = 0; i < 256; i++){
 			byte key = (byte) i; //no opposite like you did, if you can explain that to me...
-			xor_possibilities[i] = Encrypt.xor(cipher, key);
+			xor_possibilities[i] = Encrypt.xor(cipher, key, true);
 		}
 
 		return xor_possibilities; //TODO: to be modified
@@ -190,9 +200,9 @@ public class Decrypt {
 	public static byte[] vigenereWithFrequencies(byte[] cipher) {
 		//TODO : COMPLETE THIS METHOD
 		List<Byte> spaceRemoved = removeSpaces(cipher);	
-		int keyLength = vigenereFindKeyLength(spaceRemoved);
-		byte[] key = vigenereFindKey(spaceRemoved, keyLength);
-		byte[] vigenereCracked = Encrypt.vigenere(cipher, key, false); //if false, spaces are not encoded/decoded
+		int keyLength = vigenereFindKeyLength(spaceRemoved); 
+		byte[] key = vigenereFindKey(spaceRemoved, keyLength); 
+		byte[] vigenereCracked = Encrypt.vigenere(cipher, (byte[]) key); //if false, spaces are not encoded/decoded
 		
 		return vigenereCracked; //TODO: to be modified
 	}
@@ -229,22 +239,17 @@ public class Decrypt {
 		
 		// remplissage tableau coincidence
 		for(int i = 0; i < coincidence.length; i++) { //change lines
-			int coincid = 0;
-			for(int j = 0; j < length -1 - i; j++) { //as line is more décalé, the number of iteration per line decreases //second line 
+
+			for(int j = 0; j < coincidence.length - i; j++) { //as line is more décalé, the number of iteration per line decreases //second line 
 				if(cipher.get(j) == cipher.get(j+i+1)) { // the second line always starts at index 0 (j loop), the first line starts at index i+1 
-					coincid += 1;
+					coincidence[i] += 1;
 				}
 			}
-			coincidence[i] = coincid;
-		}
-		
-		System.out.println("Coincidences for decryption");
-		for(int i = 0; i < coincidence.length; i++) {										//Debugging Seems to have about 20 (many) coincidences for every line
-			System.out.println(coincidence[i]);
-		}																					
+	
+		}																				
 		
 		// calcul des maximums locaux et taille de cle potentielle 
-		int half;
+		int half; //index 0 to index half-1
 		if(coincidence.length %2 == 0) {
 			half = coincidence.length / 2;
 		}else {
@@ -260,7 +265,7 @@ public class Decrypt {
 			stock.add(1);
 		}
 		for(int k = 2; k <= half-3; k++) { // general cases
-			if(maxAfter(coincidence[k], coincidence[k-2], coincidence[k-1], coincidence[k+1], coincidence[k+2]) == true) {
+			if(maxAfter(coincidence[k], coincidence[k-1], coincidence[k+1], coincidence[k-2],  coincidence[k+2]) == true) {
 				stock.add(k);
 			}
 		}
@@ -270,6 +275,8 @@ public class Decrypt {
 		if(maxAfter(coincidence[half-1], coincidence[half-2], coincidence[half-3], 0, 0) == true) { //index length-1
 			stock.add(half-1);
 		}
+		
+		//System.out.println(stock);		//for debugging,  sometimes get 159,160 which means that max(index159, index160) is 159=60, these two are the same values
 		// --------------------
 		
 		//Calcul de la taille potentielle de la clé, stocker et comparer les nombres de décalge qui reviennent le plus souvent
@@ -281,23 +288,27 @@ public class Decrypt {
 		//Trouver le saut qui survient le plus
 		int maxKey = 0;
 		for(int m = 0; m < bonds.length; m++) {
-			if(bonds[m] > maxKey) {
+			if(bonds[m] >= maxKey) {
 				maxKey = m; //the indice of jump that occurs most is stored
 			}
 		}
 		
 		return maxKey; //TODO: to be modified
+		
 	}
 
 	
 	
-	private static boolean maxAfter(int actual, int one, int two, int three, int four) { //true if actual is the maximum with the four after, use 0 if non existent
+	public static boolean maxAfter(int actual, int one, int two, int three, int four) { //true if actual is the maximum with the four after, use 0 if non existent
 		// TODO Auto-generated method stub
 		int firstMax = Math.max(actual, one);
 		int secondMax = Math.max(actual, two);
 		int thirdMax = Math.max(actual, three);
 		int fourthMax = Math.max(actual, four);
-		if(firstMax == secondMax && secondMax == thirdMax && thirdMax == fourthMax) {
+		if(actual == one || actual == two || actual == three || actual == four) {
+			return false;
+		}
+		if((actual == firstMax) && (actual == secondMax) && (actual == thirdMax) && (actual == fourthMax)) {
 			return true;
 		}else {
 			return false;
@@ -313,10 +324,10 @@ public class Decrypt {
 	 * @param keyLength the length of the key we want to find
 	 * @return the inverse key to decode the Vigenere cipher text
 	 */
-	public static byte[] vigenereFindKey(List<Byte> cipher, int keyLength) { //would be nice to add the spaces at their respective indexes again...
+	public static byte[] vigenereFindKey(List<Byte> cipher, int keyLength) { 
 		//TODO : COMPLETE THIS METHOD
 		int remainder = cipher.size() % keyLength; //number of iterations on the last, optional
-		int multiple = Math.floorDiv(cipher.size(), keyLength); //number of iterations
+		int multiple = cipher.size() / keyLength; //number of iterations
 		byte caesarTables[][] = new byte[keyLength][multiple + 1]; //first dimension is the index of table, second dimension will be the characters of the table in order
 		//you can say the second dim size is multiple + 1 (for remainder) since caesarWtihFrequencies will take care of spaces
 		
@@ -332,18 +343,28 @@ public class Decrypt {
 			caesarTables[s+remainder][multiple] = 32; //32 is space in byte
 		}
 		
-		//so at the end we get n(keyLength) tableaux, perform caesare frequency on each of them to find the respective key, then add all together in a byte array.
+		
+		
+		//so at the end we get n(keyLength) tableaux, perform caesar frequency on each of them to find the respective key, then add all together in a byte array.
 		byte[] respectiveKey = new byte[keyLength];
+		
 		for(int s = 0; s < keyLength; s++) {
+//			
+//			System.out.println(caesarTables[s]);
+//			for(int j = 0; j < caesarTables[s].length; j++) {
+//				System.out.println(caesarTables[s][j]);
+//			}
 			
-			respectiveKey[s] = caesarWithFrequencies(caesarTables[s]);
+			byte[] sub = new byte[caesarTables[s].length];
+			for(int j = 0; j < caesarTables[s].length; j++) {
+				sub[j] = caesarTables[s][j];
+//				System.out.println(caesarTables[s][j]);
+			}
+			respectiveKey[s] = caesarWithFrequencies(sub);
 		}
 		
-//		byte[] inverseKey = new byte[respectiveKey.length]; //inverse the key
-//		for(int i = 0; i < respectiveKey.length; i ++) {
-//			inverseKey[i] = (byte) -respectiveKey[i];
-//		}
 		return respectiveKey; //TODO: to be modified
+		
 	}
 	
 	
@@ -365,6 +386,12 @@ public class Decrypt {
 		return decrypted; //TODO: to be modified
 	}
 	
+	public static byte[] decryptAdvancedCBC(byte[] plainText, byte[] iv, byte xor) { 
+		byte[] decrypted = Encrypt.chooseAdvancedCBC(plainText, iv, xor, true);
+		return decrypted;
+
+	}
+	
 	public static byte[] reverse(byte[] toReverse) {
 		int length = toReverse.length;
 		byte[] buffer = new byte[length];
@@ -375,10 +402,307 @@ public class Decrypt {
 	}
 	
 	
+	//-----------------------Vigenere Brute Force -------------------------
 	
+//	public static byte[] vigenereBruteForce(byte[] cipher) { //only return brute filtered, which means only lines with only letters (also store their respective keys)
+//		ArrayList<byte[]> possible = new ArrayList<byte[]>(); //contains only the possible lines
+//		int maxKeyLength = 12;
+//		int[] length = new int[maxKeyLength];
+//		int testingLength = 2;
+//		boolean finished = false;
+//		
+//		byte[][] workingKeys = new byte[maxKeyLength][]; //we will add only keys that work
+//		for(int i = 2; i <= maxKeyLength; i++) { //we will test 26 -keys for each length : taking the same code as vigenere frequency and testing for everykey length
+//			
+//			//create new cipher with only position i
+//			ArrayList<Byte>spaceRemoved = (ArrayList<Byte>) removeSpaces(cipher);
+//			
+//			int remainder = spaceRemoved.size() % i; //number of iterations on the last, optional
+//			int multiple = spaceRemoved.size() / i; //number of iterations
+//			byte caesarTables[][] = new byte[i][multiple + 1]; //first dimension is the index of table, second dimension will be the characters of the table in order
+//			//you can say the second dim size is multiple + 1 (for remainder) since caesarWtihFrequencies will take care of spaces
+//			
+//			for(int p = 0; p < multiple; p++) { //for multiple
+//				for(int q = 0; q < i; q++) {
+//					caesarTables[q][p] = spaceRemoved.get(p*i + q);
+//				}
+//			}
+//			for(int r = 0; r < remainder; r++){// for remainder
+//				caesarTables[r][multiple] = spaceRemoved.get(multiple * i + r);
+//			}
+//			for(int s = 0; s < i-remainder; s++) {//fill remainder with spaces
+//				caesarTables[s+remainder][multiple] = 32; //32 is space in byte
+//			}
+//			
+//			
+//			//so at the end we get n(keyLength) tableaux, perform caesar frequency on each of them to find the respective key, then add all together in a byte array.
+//			byte[][] bruteForceResult = new byte[256][];			
+//			for(int s = 0; s < i; s++) {
+//				byte[] sub = new byte[caesarTables[s].length];
+//				for(int j = 0; j < caesarTables[s].length; j++) {
+//					sub[j] = caesarTables[s][j];
+//					System.out.println(caesarTables[s][j]);
+//				}
+//				bruteForceResult = caesarBruteForce(sub);
+//			}
+//		}
+//		
+//		while(finished == false) {
+//			
+//			byte[] temp = new byte[cipher.length];
+//			byte[] key = new byte[testingLength];	//code to test all possible keys for every possible length
+//		
+//			
+//			temp = Encrypt.vigenere(cipher, (byte[]) (key));		//testing out and adding if it only contains letter and spaces
+//			boolean feasable = true;
+//			for(int i = 0; i < temp.length; i++) {
+//				if((temp[i] != 32) && !(temp[i]>=97 && temp[i]<=122)) {
+//					feasable = false;
+//					break;
+//				}
+//			}
+//			if(feasable == true) {
+//				possible.add(temp);
+//			}
+//			
+//			if(testingLength == 1) {
+//				finished = true;
+//				break;
+//			}
+//		}	
+//		
+//		
+//		
+//		int bestSolutionIndex = 0;
+//		int bestSolutionWords = 0;
+//		for(int i = 0; i < possible.size(); i++) {
+//			int n = foundInDictionary(possible.get(i));
+//			if(bestSolutionWords < n) {
+//				bestSolutionWords = n;
+//				bestSolutionIndex = i;
+//			}
+//		}
+//		return possible.get(bestSolutionIndex);
+//		
+//	}
+//	
+//	
+	//-----------------------Otp Brute Force -------------------------
+
+	
+	//-----------------------CBC Brute Force -------------------------
+
+//	public static byte[] cbcBruteForce(byte[] cipher) { //only return brute filtered, which means only lines with only letters (also store their respective keys)
+//		byte[] solution = {32, 43};
+//		final int keyLength = 5;		
+//		
+//		ArrayList<byte[]> possible = new ArrayList<byte[]>(); //contains only the possible lines
+//		
+//		for(int i = 1; i <= keyLength; i++) {
+//			ArrayList<byte[]> possibleForLength = cbcBruteForceDecrypt(cipher, i); //adding all possible lines containing only letters in the "possibleForLength" arraylist (the loop goes over all possible keys until size keyLength)
+//			for(int j = 0; j < possibleForLength.size(); j++) {
+//				possible.add(possibleForLength.get(j)); //adding the values from possibleForLength to possible		//we could do all of that manually but it's cleaner to do it that way
+//			}
+//		}
+//
+//		//Call out dictionary method to count and select the line with most words included in the dictionary
+//		int maxWords = 0;
+//		int indexOfMaxWords = 0;
+//		for(int i = 0; i < possible.size(); i++){
+//			int currentMaxWords = foundInDictionary(possible.get(i));
+//			if( currentMaxWords > maxWords) {
+//				maxWords = currentMaxWords;
+//				indexOfMaxWords = i;
+//			}
+//		}
+//				
+//
+//		return possible.get(indexOfMaxWords); //TODO: to be modified
+//	}
+//		
+//	private static ArrayList<byte[]> cbcBruteForceDecrypt(byte[] plainText, int keyLength){ //prend le texte et la longueur de clé, filtre et retourne seulement les lignes avec que des lignes de l'alphabet and une arrayliste contenant des byte
+//			return null;	
+//	}	
+
+	
+	
+	
+	//-----------------------Importation and Storage of a dictionary in a hash table-------------------------
 
 		
+	public static byte[] bruteSolution (byte[][] everything) {
+		ArrayList<byte[]> possible = likelySolutions(everything); //contains only the possible lines		
+		int maxWords = 0;
+		int bestIndex = 0;
+		for(int i = 0; i < possible.size(); i++) {
+			int currentWords = foundInDictionary(possible.get(i));
+			if(currentWords > maxWords) {
+				maxWords = currentWords;
+				bestIndex = i;
+			}
+		}
 		
+		return possible.get(bestIndex);
+	}
+	
+	public static ArrayList<byte[]> likelySolutions (byte[][] everything) { //job is to look over and return the lines where there are only letters and spaces
+		ArrayList<byte[]> possible = new ArrayList();		//only used for caesar and xor since already made
+		int size = everything.length;
+		int length = everything[0].length;
+		for(int i = 0; i < size; i++) {
+			int letterSpace = 0;
+			for(int j = 0; j < length; j++) {
+				
+				if((everything[i][j] != 32) && !(everything[i][j]>=65 && everything[i][j]<=90) && !(everything[i][j]>=97 && everything[i][j]<=122)) {
+					break;
+				}
+				letterSpace += 1;
+				if(letterSpace >= 0.9 * length) { //0.9 because words like i are not in the dictionary...
+					possible.add(everything[i]);
+				}
+			}
+		}
+		return possible;
+	}
+	
+	//load - dictionary and store it into a hashtable
+	
+	public static void load() {
+		try {
+			 FileInputStream dictionary = new FileInputStream("dictionaries/large"); //input the dictionary there
+		     BufferedReader  myReader = new BufferedReader(new InputStreamReader((dictionary)));
+		     
+		     String strLine;
+		     
+		     //initialize the hash table
+		     HashTable();	     
+		     
+		     
+		     //loop to find the tempWord
+		     while((strLine = myReader.readLine()) != null) {
+		    	String tempWord = strLine.stripTrailing();
+		    	if(tempWord.length() < 2) {
+		    		continue;//otherwise, hash gives me an error message
+		    	}
+		    	Node tempN = new Node();
+		    	tempN.value = tempWord; //copy the current word into the temporary word
+		    	
+		    	//find the hash of the word (call the hash function which then will return an integer/index number) - so we need to look at the first letter and give the index according to that		    	
+		        int key = hash(tempWord);
+		       
+		        //load the table - 1) nothing 2) already a value in it
+	            if(table[key] == null){ //or  .next ? i'm not sure
+	                tempN.next = null; //set the temporary node, next pointer to null, since it points to nothing
+	                table[key] = tempN;//points to the temporary node automatically
+	          
+	            }else{
+	                tempN.next = table[key].next; //the node gets the same next pointer as temp/the base
+	                table[key].next = tempN; //the starting node points the new temp node	                
+	            }
+		     }
+		     
+		     dictionary.close();
+			return true;
+		}catch (IOException e) {
+		      System.out.println("An error occurred.");
+		      e.printStackTrace();
+		      return false;
+		    }		
+	}
+	
+	
+	private boolean unload() {
+		table = null; //reset the first to null for each row	 
+	    return true;
+	}
+	
+
+	//Node in a hash table
+	static private class Node{ //values with same keys are placed in a linked list
+		Object value;
+		Node next; //pointer to the next node in the linked list
+					//null marks the end of the list
+	}
+	
+	final static int layers = 2;
+	final static int n = 26;
+	final static int N = (int) Math.pow(n, layers); //2 times as fast
+	
+	
+	 //Number of buckets in hash table
+	static Node[] table = new Node[N]; //hash table as an array of linked list
+	
+	 private static void HashTable() {
+         // Create a hash table with an initial size of 64.
+       table = new Node[N];
+    
+    }
+	
+	 private static void HashTable(int initialSize) {
+         // Create a hash table with a specified initial size.
+         // Precondition: initalSize > 0.
+       table = new Node[initialSize];
+    }
+	
+	static public int hashPosition(String word, int n) { //first position is n=0, a = 0, b =1, ...
+		int position = 0;	
+		position = (int) word.charAt(n-1);
+		position -= 97;
+		return position;
+	}
+	
+	static public int hash(String word) { //only made for 2 first letters bc then it gets harder to find a way
+		int key = 0;
+		int first = hashPosition(word, 1);
+		int second = hashPosition(word, 2);
+		key = first * 26 + second;
+        return key;
+	}
+	
+	
+
+	public static int foundInDictionary (byte[] line) { //returns number of words found in the dictionary
+		String completeLine = bytesToString(line);
+		String[] wordsSeparated = completeLine.split(" ");
+		int wordCount = 0;
+		for(int i = 0; i < wordsSeparated.length; i++) {
+			if(wordsSeparated[i].length() < layers) {
+				continue;
+			}else {
+				boolean aWord = check(wordsSeparated[i]);
+				if(aWord == true) {
+					wordCount += 1;
+				}
+			}
+		}
+		return wordCount;
+	}
+	
+	public static boolean check(String word) { //returns true if word is in dictionary
+		word = word.toLowerCase();
+		int key = hash(word);
+		boolean found = false;
+		Node toCheck = table[key];
+		while(toCheck != null) {
+			if(word.equals(toCheck.value)) {
+				found = true;
+				break;
+			}else{
+				toCheck = toCheck.next;
+			}
+		}
+		
+		if(found == true) {
+			return true;
+		}else {
+			return false;
+		}
+	}
+	
+	
+	
+	
+	
 		
 		
 		
