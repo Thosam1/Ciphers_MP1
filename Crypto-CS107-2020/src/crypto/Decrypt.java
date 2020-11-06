@@ -37,21 +37,21 @@ public class Decrypt {
 	 */
 	public static String breakCipher(String cipher, int type) {
 
-		byte[] cipherByteArray = stringToBytes(cleanString(cipher));
-		byte[][] decodedCipherArray;
+		byte[] cipherByteArray = stringToBytes(cipher);
+		byte[][] decodedCipherArray = new byte[256][];
 		switch (type) {
 		case 0:
 			byte caesarKey = Decrypt.caesarWithFrequencies(cipherByteArray);
-		 	decodedCipherArray[0] = Encrypt.caesar(stringToBytes(cipherByteArray), caesarKey));
+		 	decodedCipherArray[0] = Encrypt.caesar(cipherByteArray, caesarKey);
 			break;
 		case 1:
-			decodedCipherArray[0] = vigenereWithFrequencies;
+			decodedCipherArray[0] = vigenereWithFrequencies(cipherByteArray);
 			break;
 		case 2:
 			decodedCipherArray = xorBruteForce(cipherByteArray);
 			break;
 		default:
-			decodedCipherArray = stringToBytes(cipher);
+			decodedCipherArray[0] = stringToBytes(cipher);
 
 		}
 		return arrayToString(decodedCipherArray);
