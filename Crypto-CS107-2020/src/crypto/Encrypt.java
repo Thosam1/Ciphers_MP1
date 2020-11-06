@@ -73,7 +73,20 @@ public class Encrypt {
 			byte[] newkey = new byte[] {key}; //creating a byte array with @param key as unique entry
 			return byteArrayPlusKeys(plainText, newkey, spaceEncoding); //byteArrayPlusKeys adds the value of the key to every byte in -plainText-
 		}
+/**
+		 * Method to encode a byte array message using a single character key
+		 * the key is simply added to each byte of the original message
+		 * @param plainText The byte array of the string to encrypt
+		 * @param key the byte corresponding to the char we use to shift
+		 * default is that spaces are not encrypted
+		 * @return an encoded byte array
+		 */
+		public static byte[] caesar(byte[] plainText, byte key) {
+			assert(plainText != null); //error if plainText is null
 
+			byte[] newkey = new byte[] {key}; //creating a byte array with @param key as unique entry
+			return byteArrayPlusKeys(plainText, newkey, false); //byteArrayPlusKeys adds the value of the key to every byte in -plainText-
+		}
 	//=========================================================================================================
 
 	/**Method that encrypts a byte input with a byte key and returns the encrypted message as a byte array
