@@ -28,6 +28,8 @@ public class Main {
 	*/
 	public static String encryptInterpreteurDeCommande(String message, String type) {
 		byte[] plainText = stringToBytes(message);
+		String cleanedString = cleanString(message);
+		byte [] cleanedByteArray = stringToBytes(cleanedString);
 		byte[] encodedArray;
 		Scanner scanner = new Scanner(System.in);
 
@@ -51,12 +53,12 @@ public class Main {
 		else if(type.equals("3")) {
 			System.out.println("To use OneTime I need you to give me a pad which will be stored as an array of bytes. (An Array is also known as a List) " +System.lineSeparator()+"A pad is a string that is at least of the same length as the message that you want to encrypt" + System.lineSeparator()+"It can be anything from a phrase to a random sequence of characters. " + System.lineSeparator()+"If you don't know what I refer to when talking about characters and bytes, please refer to the 'Help'. " + System.lineSeparator()+"Remember, it is very important that you remember your pad and that you keep it secret!");
 			String oneTimeCipherString = scanner.nextLine();
-			encodedArray = Encrypt.oneTimePad(plainText, stringToBytes(oneTimeCipherString));
+			encodedArray = Encrypt.oneTimePad(cleanedByteArray, stringToBytes(oneTimeCipherString));
 		}
 		else if(type.equals("4")) {
 			System.out.println("To use CBC I need you to give me a pad which will be stored as an array of bytes. (An Array is also known as a List) "+System.lineSeparator()+"A pad is a string that is at least of the same length as the message that you want to encrypt"  + System.lineSeparator()+"It can be anything from a phrase to a random sequence of characters. " + System.lineSeparator()+"If you don't know what I refer to when talking about characters and bytes, please refer to the 'Help'. " + System.lineSeparator()+"Remember, it is very important that you remember your pad and that you keep it secret!");
 			String cbcCipherString = scanner.nextLine();
-			encodedArray = Encrypt.cbc(plainText, stringToBytes(cbcCipherString));
+			encodedArray = Encrypt.cbc(cleanedByteArray, stringToBytes(cbcCipherString));
 		}
 		else {
 			encodedArray = stringToBytes(message);
