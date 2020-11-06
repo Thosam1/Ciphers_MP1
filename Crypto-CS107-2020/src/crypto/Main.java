@@ -114,6 +114,7 @@ public class Main {
 
 
 	}
+	//============================================================================================
 	/**
 	 * This method asks the user if he would like to continue with the shell
 	 * the method asks for a Yes or No answer and loops until one of the two values is entered
@@ -135,6 +136,7 @@ public class Main {
 			return false;
 		}
 	}
+	//============================================================================================
 	/**
 	 * This method is the Shell
 	 * It is an interface between a user and the program
@@ -145,6 +147,7 @@ public class Main {
 	 * nextLine isnt called once to prevent errors!
 	 * The method Shell does not take parameters and is of type void
 	*/
+	
 	public static void Shell(){
 		boolean isFinished = false;
 		Scanner scanner = new Scanner(System.in);
