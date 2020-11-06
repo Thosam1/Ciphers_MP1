@@ -27,7 +27,7 @@ public class Main {
 	 * @return string corresponding to encrypted message
 	*/
 	public static String encryptInterpreteurDeCommande(String message, String type) {
-		byte[] plainText = stringToBytes(cleanString(message));
+		byte[] plainText = stringToBytes(message);
 		byte[] encodedArray;
 		Scanner scanner = new Scanner(System.in);
 
