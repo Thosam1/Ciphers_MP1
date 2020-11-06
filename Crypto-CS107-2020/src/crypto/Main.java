@@ -18,7 +18,7 @@ import static crypto.Helper.bytesToString;
  * Bonus: CBC with encryption, shell
  */
 public class Main {
-	/**
+/**
 	 * This method takes care of the encryption part of the Shell
 	 * The method is interactive in that it prints certain strings and asks for inputs
 	 * nextLine isnt called once to prevent errors!
@@ -33,28 +33,29 @@ public class Main {
 
 		if (type.equals("0")) {
 			System.out.println("To use Caesar Cipher I need you to give me a key (any character that you would like) which will be stored as a byte." + System.lineSeparator()+"If you don't know what I refer to when talking about keys and characters, please refer to the 'Help'. " + System.lineSeparator()+"Remember, it is very important that you remember your key and keep it secret! " + System.lineSeparator()+"Without this key it is very difficult to decrypt your message.");
-			String caesarCipherKey = scanner.next(); //It is extremely important to use .next() and not .nextString which creates many problems
+			String caesarCipherKey = scanner.nextLine();
 			byte[] caesarCipherKeyByteArray = stringToBytes(caesarCipherKey);
-			encodedArray = Encrypt.caesar(plainText, caesarCipherKeyByteArray[0]);
+			encodedArray = Encrypt.caesar(plainText, caesarCipherKeyByteArray[0], false);
 		}
 		else if(type.equals("1")) {
 			System.out.println("To use Vigenere Cipher I need you to give me a key which will be stored as an array of bytes. (An Array is also known as a List) " + System.lineSeparator()+"Your key can be anything from a word to a random sequence of characters. " + System.lineSeparator()+"If you don't know what I refer to when talking about keys and characters, please refer to the 'Help'. " + System.lineSeparator()+"Remember, it is very important that you remember your key and that you keep it secret!");
-			String vigenereCipherKeyString = scanner.next();
+			String vigenereCipherKeyString = scanner.nextLine();
 			encodedArray = Encrypt.vigenere(plainText, stringToBytes(vigenereCipherKeyString));
 		}
 		else if(type.equals("2")) {
 			System.out.println("To use XOR Cipher I need you to give me a key (any character that you would like) which will be stored as a byte. " + System.lineSeparator()+"If you don't know what I refer to when talking about keys and characters, please refer to the 'Help'. " + System.lineSeparator()+"Remember, it is very important that you remember this key and keep it secret! " + System.lineSeparator()+"Without this key it is very difficult to decrypt your message.");
-			byte xorCipherKey = scanner.nextByte();
+			byte xorCipherKey = (byte) scanner.next().charAt(0);//If a word is inputed the program keeps the first character and turns it into a byte
+			scanner.nextLine();//this line is essential to prevent any error later in the code in the case that more than one word is inputed
 			encodedArray = Encrypt.xor(plainText, xorCipherKey);
 		}
 		else if(type.equals("3")) {
 			System.out.println("To use OneTime I need you to give me a pad which will be stored as an array of bytes. (An Array is also known as a List) " +System.lineSeparator()+"A pad is a string that is at least of the same length as the message that you want to encrypt" + System.lineSeparator()+"It can be anything from a phrase to a random sequence of characters. " + System.lineSeparator()+"If you don't know what I refer to when talking about characters and bytes, please refer to the 'Help'. " + System.lineSeparator()+"Remember, it is very important that you remember your pad and that you keep it secret!");
-			String oneTimeCipherString = scanner.next();
+			String oneTimeCipherString = scanner.nextLine();
 			encodedArray = Encrypt.oneTimePad(plainText, stringToBytes(oneTimeCipherString));
 		}
 		else if(type.equals("4")) {
 			System.out.println("To use CBC I need you to give me a pad which will be stored as an array of bytes. (An Array is also known as a List) "+System.lineSeparator()+"A pad is a string that is at least of the same length as the message that you want to encrypt"  + System.lineSeparator()+"It can be anything from a phrase to a random sequence of characters. " + System.lineSeparator()+"If you don't know what I refer to when talking about characters and bytes, please refer to the 'Help'. " + System.lineSeparator()+"Remember, it is very important that you remember your pad and that you keep it secret!");
-			String cbcCipherString = scanner.next();
+			String cbcCipherString = scanner.nextLine();
 			encodedArray = Encrypt.cbc(plainText, stringToBytes(cbcCipherString));
 		}
 		else {
@@ -73,40 +74,40 @@ public class Main {
 	 * @param cipher the string input that is
 	 * method is void
 	*/
-	public static void breakCipher(String cipher, int type) {
+	public static void breakCipher(String cipher, String type) {
 		byte[] cipherByteArray = stringToBytes(cipher);
 		byte[][] decodedCipherArray;//used for bruteForce
 		Scanner scanner = new Scanner(System.in);
-		if (type==0) {
+		if (type.equals("0")) {
 			System.out.println("When it comes to the decryption of Caesar Cipher, there are two different techniques that I can use: " + System.lineSeparator()+"Brute Force and Frequencies. " + System.lineSeparator()+"If you want to try out the second method, which requires no effort from your part, type '1'. " + System.lineSeparator()+"However, if you are willing to look through 256 possible decryptions to find the valid one, then type '0'. " + System.lineSeparator()+"Brute Force takes more time; however, it works 100% of the time. " + System.lineSeparator()+"Frequencies is less reliable with small ciphers");
-			int bruteOrFrequencies = scanner.nextInt();
-			if (bruteOrFrequencies==0) {
+			String bruteOrFrequencies = scanner.nextLine();
+			if (bruteOrFrequencies.equals("0")) {
 				decodedCipherArray = Decrypt.caesarBruteForce(cipherByteArray);
 				System.out.println("To find the decrypted text, look for the lines with letters and words that make sense. " + System.lineSeparator()+"Here are the 256 possibilites:");
 				System.out.println(Decrypt.arrayToString(decodedCipherArray));
 			}
-			else if (bruteOrFrequencies==1) {
+			else if (bruteOrFrequencies.equals("1")) {
 				byte caesarKey = Decrypt.caesarWithFrequencies(cipherByteArray);
 				System.out.println("The text was: " + Encrypt.caesar(cipherByteArray, caesarKey));
 			}
 			else{}//nothing is printed if something else than 0 and 1 is entered
 		}
 
-		else if (type==1){
+		else if (type.equals("1")){
 			System.out.println("When it comes to the decryption of Vigenere, I use the frequencies of letters in the English Alphabet " + System.lineSeparator()+"to give you the answer that is most likely to be the right decryption.");
 			byte[] vigenereKey = Decrypt.vigenereWithFrequencies(cipherByteArray);
 			System.out.println(bytesToString(vigenereKey));
 
 		}
-		else if (type==2) {
+		else if (type.equals("2")) {
 			System.out.println("When it comes to the decryption of XOR there is one method: " + System.lineSeparator()+"Brute Force. " + System.lineSeparator()+"It consists in printing the 256 possibilities of encryption. " + System.lineSeparator()+"Then, it will be up to you to find the true meaning of your encrypted message.");
 			decodedCipherArray = Decrypt.xorBruteForce(cipherByteArray);
 			System.out.println("All you have to do is to look for the line that has letters and that makes sense. " + System.lineSeparator()+"Here are the 256 possibilities:");
 			System.out.println(Decrypt.arrayToString(decodedCipherArray));
 		}
-		else if (type==3) {
+		else if (type.equals("3")) {
 			System.out.println("When it comes to the decryption of CBC, I can only perform it if you have the pad used to encrypt the message. " + System.lineSeparator()+"Please input it now.");
-			String padString = scanner.next();
+			String padString = scanner.nextLine();
 			Decrypt.decryptCBC(cipherByteArray, stringToBytes(padString));
 		}
 		else {
@@ -127,7 +128,7 @@ public class Main {
 		String yesOrNo ="";
 		while(!((yesOrNo.equals("Yes"))||(yesOrNo.equals("No")))) {
 			System.out.println("Would you like to stop the program? " + System.lineSeparator()+"'Yes'or 'No'");
-			yesOrNo = scanner.next();
+			yesOrNo = scanner.nextLine();
 		}
 		if (yesOrNo.equals("Yes")){
 			return true;//the while loop in the method Shell will stop
@@ -154,22 +155,22 @@ public class Main {
 		System.out.println("Hello! I am a program that has many capabilities when it comes to encryption and decryption.");
 		while (!(isFinished)) {
 			System.out.println("If you would like to encrypt a string, type 'E'. " + System.lineSeparator()+"However, if you would like to decrypt a string, type 'D'. " + System.lineSeparator()+"Finally, if you desire a precision about the types of encryptions and decryptions that this program can do, please type 'Help'.");
-			String desiredTask = scanner.next();
+			String desiredTask = scanner.nextLine();
 			//encryption part of the shell
 			if (desiredTask.equals("E")){
 				System.out.println("What phrase would you like me to Encrypt? " + System.lineSeparator()+"Remember that I work with bytes; therefore, you can enter other characters than letters! (spaces won't be encrypted)");
-				String messageToEncode = scanner.next();
+				String messageToEncode = scanner.nextLine();
 				System.out.println("Now that you have entered your phrase, you need to choose the type of encryption that you want me to perform. " + System.lineSeparator()+"Enter '0' to use Caesar, '1' for Vigenere , '2' for XOR,'3' for One Time, and '4' to use CBC! " + System.lineSeparator()+"If you input anything else, I will output your phrase back to you, and you will get a chance to start again!" );
-				String encryptIndex = scanner.next();
+				String encryptIndex = scanner.nextLine();
 				System.out.println("Here is your encrypted phrase: " + encryptInterpreteurDeCommande(messageToEncode, encryptIndex));
 				isFinished = endOfShell();
 			}
 			//decryption part of the shell
 			else if (desiredTask.equals("D")) {
 				System.out.println("Please input the encrypted phrase that you would like me to Decrypt");
-				String cipher = scanner.next();
+				String cipher = scanner.nextLine();
 				System.out.println("Now that you have entered the phrase that I will Decrypt, you need to select what cipher is needed to Decrypt this message. " + System.lineSeparator()+"Type '0' for Caesar, '1' for Vigenere, '2' for XOR and '3' for CBC. ");
-				int typeOfDecryption = scanner.nextInt();
+				String typeOfDecryption = scanner.nextLine();
 				breakCipher(cipher, typeOfDecryption);
 				isFinished = endOfShell();
 		}
