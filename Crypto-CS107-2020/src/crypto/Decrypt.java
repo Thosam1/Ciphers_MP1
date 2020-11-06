@@ -41,41 +41,39 @@ public class Decrypt {
 		byte[][] decodedCipherArray;
 		switch (type) {
 		case 0:
-			decodedCipherArray = caesar(plainText,cipherKey[0]);
+			byte caesarKey = Decrypt.caesarWithFrequencies(cipherByteArray);
+		 	decodedCipherArray[0] = Encrypt.caesar(stringToBytes(cipherByteArray), caesarKey));
 			break;
 		case 1:
-			decodedCipherArray[0] = vigenereWithFrequencies(cipherByteArray);
+			decodedCipherArray[0] = vigenereWithFrequencies;
 			break;
 		case 2:
 			decodedCipherArray = xorBruteForce(cipherByteArray);
 			break;
 		default:
 			decodedCipherArray = stringToBytes(cipher);
-			
+
 		}
-		return null;
+		return arrayToString(decodedCipherArray);
 
 	}
-	
-	
+
+
 	/**
 	 * Converts a 2D byte array to a String
 	 * @param bruteForceResult a 2D byte array containing the result of a brute force method
 	 */
 	public static String arrayToString(byte[][] bruteForceResult) {
-
-		/* print null between spaces and
-		 *  didnt manage to use System.lineSeperator()*/
 		String bruteForceStringResult = "";
-		for (int i = 0; i<256; i++) {
-			bruteForceStringResult = bruteForceStringResult.concat(bytesToString(bruteForceResult[i])+System.lineSeparator());
+		for (int i = 0; i<256; i++) { //goes through the 256 rows of the 2D array to concatenate the string equivalence
+			bruteForceStringResult = bruteForceStringResult.concat(bytesToString(bruteForceResult[i])+System.lineSeparator()); //a line is added between each decryption to keep it clear
 		}
 		return bruteForceStringResult;
 	}
-	
-	
+
+
 	//-----------------------Caesar-------------------------
-	
+
 	/**
 	 *  Method to decode a byte array  encoded using the Caesar scheme
 	 * This is done by the brute force generation of all the possible options
@@ -85,15 +83,15 @@ public class Decrypt {
 	public static byte[][] caesarBruteForce(byte[] cipher) {
 		byte[][] allCaesarPossibilities = new byte[256][];
 
-		for (int i=0; i<256; i++) {
-			byte oppositeOfPotentialKey = (byte)-i;
-			allCaesarPossibilities[i] = Encrypt.caesar(cipher, oppositeOfPotentialKey); //im not sure about that line
+		for (int i=0; i<256; i++) { //goes through 256 potential keys
+			byte oppositeOfPotentialKey = (byte)-i; //if the decryption is found with a key of value x, then we know that the encryption key was -x
+			allCaesarPossibilities[i] = Encrypt.caesar(cipher, oppositeOfPotentialKey); //each row in the byte array contains a possible decryption of the cipher
 		}
 		return allCaesarPossibilities;
 
-	}	
-	
-	
+	}
+
+
 	/**
 	 * Method that finds the key to decode a Caesar encoding by comparing frequencies
 	 * @param cipherText the byte array representing the encoded text
@@ -104,41 +102,42 @@ public class Decrypt {
 		float[] characterFrequencies = computeFrequencies(cipherText);
 
 		return caesarFindKey(characterFrequencies);
-	
+
 	}
-	
+
 	/**
 	 * Method that computes the frequencies of letters inside a byte array corresponding to a String
-	 * @param cipherText the byte array 
+	 * @param cipherText the byte array
 	 * @return the character frequencies as an array of float
 	 */
 	public static float[] computeFrequencies(byte[] cipherText) {
 		float[] characterFrequenceInCypher = new float[256];
-		int i=0;
-		int numberOfSpaces = 0;
-		while(i<cipherText.length) {
-			characterFrequenceInCypher[cipherText[i]+128] +=1;
-			if(cipherText[i]==32) {
-				numberOfSpaces +=1;	
+		int numberOfSpaces = 0;//This value will help the method know how many characters there are in the cipherText
+		for(int i=0; i<cipherText.length; i++) {
+			characterFrequenceInCypher[cipherText[i]+128] +=1; //indexes can't be negative so we add 128
+			if(cipherText[i]==32) {//32 is the byte value for spaces
+				numberOfSpaces +=1;
 			}
-			i++;
 		}
-		int numberOfCharacters = i-numberOfSpaces;
+		int numberOfCharacters = (cipherText.length)-numberOfSpaces;
 		for(int j=0; j<256; j++) {
-			if(j!=160) {
-				characterFrequenceInCypher[j]=characterFrequenceInCypher[j]/numberOfCharacters;
+			if(j!=160) {//32 + 128 = 160; index 160 of characterFrequenceInCypher corresponds to spaces
+				characterFrequenceInCypher[j]=characterFrequenceInCypher[j]/numberOfCharacters; //dividing by the number of characters gives us a max value of 1
 			}
-			else {
-				characterFrequenceInCypher[j]=0;
-			}
+			characterFrequenceInCypher[160]=0;//we don't want the frequence of spaces
 		}
-		return characterFrequenceInCypher; 
+		return characterFrequenceInCypher;
 
 	}
-	
-	
+
+
 	/**
 	 * Method that finds the key used by a  Caesar encoding from an array of character frequencies
+	 * This is done by finding the maxScalarProduct
+	 * The algorithm iterates through the array ENGLISHFREQUENCIES and takes a "sub array" of characterFrequencies
+	   of the same length(26). The scalar product will then be the sum of the product of each of their corresponding values
+		 example: subArray[0]*ENGLISHFREQUENCIES[0]+...+subArray[25]*ENGLISHFREQUENCIES[25]
+		 This is done for the 256 possible subArrays of length 26
 	 * @param charFrequencies the array of character frequencies
 	 * @return the key
 	 */
@@ -146,10 +145,11 @@ public class Decrypt {
 		float[] scalarProductOfEachIteration = new float[256];
 		for (int i=0;i<256;i++) {
 			for (int j=0; j<26; j++) {
-				scalarProductOfEachIteration[i] += ENGLISHFREQUENCIES[j]*charFrequencies[(j+i)%256];
-			}
-		}
-		
+				scalarProductOfEachIteration[i] += ENGLISHFREQUENCIES[j]*charFrequencies[(j+i)%256];//%256 keeps the value of j+i between 0 and 255
+			}}
+		//this part of the method iterates through scalarProductOfEachIteration and finds the max value
+		/*the array maxScalarproduct has two entries:
+	 	 the first is a scalar product and the second is the index associated to that maximum scalar product*/
 		float[] maxScalarProduct = {scalarProductOfEachIteration[0],0};
 		for(int j=1; j<256; j++) {
 			if (scalarProductOfEachIteration[j]>maxScalarProduct[0]) {
@@ -158,10 +158,11 @@ public class Decrypt {
 			}
 		}
 		int indexMaxScalarProduct = (int) maxScalarProduct[1];
-		byte caesarKey = (byte) (97+128-indexMaxScalarProduct);
-		return caesarKey;
+		byte caesarKey = (byte) (97+128-indexMaxScalarProduct);// 97 is the byte value for a and 97+128 is the index for a in charFrequencies
+		return caesarKey; //caesarKey is the opposite of the key that was used to encrypt the message
 
 	}
+
 	
 	
 	
@@ -174,7 +175,6 @@ public class Decrypt {
 	 * @return the array of possibilities for the clear text
 	 */
 	public static byte[][] xorBruteForce(byte[] cipher) {
-		//TODO : COMPLETE THIS METHOD
 
 		byte[][] xor_possibilities = new byte[256][];
 		for(int i = 0; i < 256; i++){
@@ -182,7 +182,7 @@ public class Decrypt {
 			xor_possibilities[i] = Encrypt.xor(cipher, key, true);
 		}
 
-		return xor_possibilities; //TODO: to be modified
+		return xor_possibilities;
 
 	}
 	
@@ -198,13 +198,12 @@ public class Decrypt {
 	 * @return the byte encoding of the clear text
 	 */
 	public static byte[] vigenereWithFrequencies(byte[] cipher) {
-		//TODO : COMPLETE THIS METHOD
 		List<Byte> spaceRemoved = removeSpaces(cipher);	
 		int keyLength = vigenereFindKeyLength(spaceRemoved); 
 		byte[] key = vigenereFindKey(spaceRemoved, keyLength); 
 		byte[] vigenereCracked = Encrypt.vigenere(cipher, (byte[]) key); //if false, spaces are not encoded/decoded
 		
-		return vigenereCracked; //TODO: to be modified
+		return vigenereCracked;
 	}
 	
 	
@@ -215,7 +214,6 @@ public class Decrypt {
 	 * @return a List of bytes without spaces
 	 */
 	public static List<Byte> removeSpaces(byte[] array){
-		//TODO : COMPLETE THIS METHOD
 		List<Byte> list = new ArrayList<Byte>();
 		for(int i = 0; i < array.length; i++) { //adding all non spaces values to <byte> list
 			if(array[i] != 32) {
@@ -232,7 +230,6 @@ public class Decrypt {
 	 * @return the length of the key
 	 */
 	public static int vigenereFindKeyLength(List<Byte> cipher) {
-		//TODO : COMPLETE THIS METHOD
 		int length = cipher.size();
 		int coincidence[] = new int[length - 1]; //coincidence[0] would be the number of coincidences between line 0 and line 1, [length-1] would be between line 0 and line length-1
 		
@@ -293,14 +290,13 @@ public class Decrypt {
 			}
 		}
 		
-		return maxKey; //TODO: to be modified
+		return maxKey;
 		
 	}
 
 	
 	
 	public static boolean maxAfter(int actual, int one, int two, int three, int four) { //true if actual is the maximum with the four after, use 0 if non existent
-		// TODO Auto-generated method stub
 		int firstMax = Math.max(actual, one);
 		int secondMax = Math.max(actual, two);
 		int thirdMax = Math.max(actual, three);
@@ -325,7 +321,6 @@ public class Decrypt {
 	 * @return the inverse key to decode the Vigenere cipher text
 	 */
 	public static byte[] vigenereFindKey(List<Byte> cipher, int keyLength) { 
-		//TODO : COMPLETE THIS METHOD
 		int remainder = cipher.size() % keyLength; //number of iterations on the last, optional
 		int multiple = cipher.size() / keyLength; //number of iterations
 		byte caesarTables[][] = new byte[keyLength][multiple + 1]; //first dimension is the index of table, second dimension will be the characters of the table in order
@@ -363,7 +358,7 @@ public class Decrypt {
 			respectiveKey[s] = caesarWithFrequencies(sub);
 		}
 		
-		return respectiveKey; //TODO: to be modified
+		return respectiveKey;
 		
 	}
 	
@@ -376,14 +371,13 @@ public class Decrypt {
 	 * @param iv the pad of size BLOCKSIZE we use to start the chain encoding
 	 * @return the clear text
 	 */
-	public static byte[] decryptCBC(byte[] cipher, byte[] iv) {
-		//TODO : COMPLETE THIS METHOD	
+	public static byte[] decryptCBC(byte[] cipher, byte[] iv) {	
 							//		byte[] reverseCipher = reverse(cipher); // i thought we had to do from the end, may be useful later
 							//		byte[] reverseIv = reverse(iv);
 							//		byte[] decrypted = Encrypt.cbc(reverseCipher, reverseIv);
 		byte[] decrypted = Encrypt.chooseCBC(cipher, iv, true);
 		
-		return decrypted; //TODO: to be modified
+		return decrypted;
 	}
 	
 	public static byte[] decryptAdvancedCBC(byte[] plainText, byte[] iv, byte xor) { 
