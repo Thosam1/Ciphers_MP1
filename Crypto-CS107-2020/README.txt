@@ -1,7 +1,7 @@
 Informations sur le fichier main :
 
 En haut : SHELL
-
+!!! utiliser le dossier not dossier res pour acceder au bonus /res
 Dans la fonction Main :
 
 Nous avons mis les fonctions en commentaires pour les vérifiers, décommenter et lancer le programme.
@@ -35,7 +35,9 @@ Bonus :
 		étant donné que pour cbc, l'encryptement et le déchiffrement sont très similaires, nous avons créé une fonction 
 		
 		chooseCBC (pour cbc normal) et chooseAdvancedCBC(pour cbc+xor) qui sont tous les deux dans le ficher Encrypt.java et prennent tous les deux une boolean false pour encrypter et true pour décrypter
-2)
+		
+2) Point important, dans le shell veuillez ne pas mettre d'espaces dans la clé. 
+	Dans le shell, pour le décryptage de césar et xor, il y a la possibilité de trier les 256 possibilités automatiquement. (ceci fonctionne meme si le message original contient des points d'exclamations, points virgules ou autres)
 
 3) Pour xor et caesar par force brute, dans les méthodes "testXor() et testCaesar()" qui se trouvent tous les deux après leur "check" respectives, nous avons mis en commentaire l'ajout du résultat dans un ficher créé dans le dossier /res
 	
@@ -43,7 +45,7 @@ Bonus :
 	
 	Nous nous sommes dit que ce serait cool de pouvoir trier et sélectionner la bonne réponse parmis les possibilités de la méthode brute.
 	
-	Donc après beaucoup de recherche nous avons créé un dossier /dictionaries et nous avons importé un dictionaire contenant plus de 143'000 mots.
+	Donc après beaucoup de recherche nous avons nous avons importé un dictionaire contenant plus de 143'000 mots dans le dossier /res.
 	
 	Nous avons pensé à comparer les possibilités selon le nombres de mots contenu dans le dictionaire. 
 	
