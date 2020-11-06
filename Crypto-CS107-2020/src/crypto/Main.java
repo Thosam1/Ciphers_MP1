@@ -20,7 +20,7 @@ import static crypto.Helper.bytesToString;
 public class Main {
 	/**
 	 * This method takes care of the encryption part of the Shell
-	 * The method is interactive in that prints certain strings and asks for inputs
+	 * The method is interactive in that it prints certain strings and asks for inputs
 	 * nextLine isnt called once to prevent errors!
 	 * @param type the string value that will determine what type of encryption is going to be done
 	 * @param message the string input that is to be encrypted
