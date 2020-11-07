@@ -3,6 +3,11 @@ Par conséquent nous avons utilisé des liens directs  dropbox pour lire les fic
 Nous avons essayer avec google drive sans succès car le programme bloque à <DOCTYPE> et nous ne pouvons lire le fichier directement.
 Donc dans les fonctions de test tout en bas dans Main.java et dans la fonction load() dans Decrypt.java, il y a la lecture de ces fichiers originales en commentaire, indiqué par !!! 
 
+		Links :
+		challenge-encrypted.txt :	https://dl.dropboxusercontent.com/s/8and8qautc0i0vo/challenge-encrypted.txt?dl=0
+		text_one :	https://dl.dropboxusercontent.com/s/ore79wrwdg12p2v/text_one.txt?dl=0
+		text_two :	https://dl.dropboxusercontent.com/s/hwfnmho8fomi1ws/text_two.txt?dl=0
+		text_three :	https://dl.dropboxusercontent.com/s/ph60v9bed3aqgaz/text_three.txt?dl=0 
 
 Informations sur le fichier main :
 

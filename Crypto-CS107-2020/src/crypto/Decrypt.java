@@ -235,7 +235,7 @@ public class Decrypt {
 		// remplissage tableau coincidence
 		for(int i = 0; i < coincidence.length; i++) { //change lines
 
-			for(int j = 0; j < coincidence.length - i; j++) { //as line is more décalé, the number of iteration per line decreases //second line
+			for(int j = 0; j < coincidence.length - i; j++) { //as line is more dÃ©calÃ©, the number of iteration per line decreases //second line
 				if(cipher.get(j) == cipher.get(j+i+1)) { // the second line always starts at index 0 (j loop), the first line starts at index i+1
 					coincidence[i] += 1;
 				}
@@ -274,8 +274,8 @@ public class Decrypt {
 		//System.out.println(stock);		//for debugging,  sometimes get 159,160 which means that max(index159, index160) is 159=60, these two are the same values
 		// --------------------
 
-		//Calcul de la taille potentielle de la clé, stocker et comparer les nombres de décalge qui reviennent le plus souvent
-		int bonds[] = new int[40];  // stocker le nombre de bonds pour des keys de longueurs 0 à 40
+		//Calcul de la taille potentielle de la clÃ©, stocker et comparer les nombres de dÃ©calge qui reviennent le plus souvent
+		int bonds[] = new int[40];  // stocker le nombre de bonds pour des keys de longueurs 0 Ã  40
 		for(int l = 0; l < stock.size() - 1; l++) {
 			int jump = stock.get(l+1) - stock.get(l); //le nombre de saut selon les indices des maximums locaux
 			bonds[jump] += 1;
@@ -437,7 +437,7 @@ public class Decrypt {
 	//wget http://cdn.cs50.net/2019/fall/psets/5/speller/speller/dictionaries/large
 	public static void load() {
 		try {
-//			FileInputStream dictionary = new FileInputStream("res/large"); //input the dictionary there (originally from local file)		!!! Use this if dictionary in local !!!
+//			FileInputStream dictionary = new FileInputStream("res/large"); //input the dictionary there (originally from local file)
 //			BufferedReader  myReader = new BufferedReader(new InputStreamReader((dictionary)));
 			URL dictionary = new URL("https://dl.dropboxusercontent.com/s/mcjrgibzpdwey36/large?dl=0"); //direct link to my dropbox //couldn't find a way via google drive
 			BufferedReader  myReader = new BufferedReader(new InputStreamReader(dictionary.openStream()));
@@ -474,8 +474,8 @@ public class Decrypt {
 	            }
 		     }
 
-//		     dictionary.close();		!!! if dictionary in local	!!!
-//		     myReader.close();			!!! remove that if dictionary in local !!!
+//		     dictionary.close();		if dictionary in local
+		     myReader.close();
 		}catch (IOException e) {
 		      System.out.println("An error occurred.");
 		      e.printStackTrace();
