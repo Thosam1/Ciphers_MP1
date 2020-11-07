@@ -11,6 +11,10 @@ import java.util.Scanner;
 import static crypto.Encrypt.generatePad;
 import static crypto.Helper.bytesToString;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader; // Import this class to read text files
+import java.net.URL;
+
 /*
  * Part 1: Encode (with note that one can reuse the functions to decode)
  * Part 2: bruteForceDecode (caesar, xor) and CBCDecode
@@ -228,13 +232,13 @@ public class Main {
 	//---------------------------MAIN---------------------------
 	public static void main(String args[]) {
 		
-//		checkCaesar();
+		checkCaesar();
 //		checkVigenere();
 //		checkXor();
 //		checkOtp();
 //		checkCbc();
-//		checkChallenge()
-		Shell();
+//		checkChallenge();
+//		Shell();
 
 
 	}
@@ -249,6 +253,13 @@ public class Main {
 //	String zl = "z";
 	
 	//-----------------------------------------------------------------------------------------------
+	
+//	Links :
+//	challenge-encrypted.txt :	https://dl.dropboxusercontent.com/s/8and8qautc0i0vo/challenge-encrypted.txt?dl=0
+//	text_one :	https://dl.dropboxusercontent.com/s/ore79wrwdg12p2v/text_one.txt?dl=0
+//	text_two :	https://dl.dropboxusercontent.com/s/hwfnmho8fomi1ws/text_two.txt?dl=0
+//	text_three :	https://dl.dropboxusercontent.com/s/ph60v9bed3aqgaz/text_three.txt?dl=0 
+	
 	
 	public static void checkChallenge() {
 		System.out.println("Empty program for now... But it runs!");

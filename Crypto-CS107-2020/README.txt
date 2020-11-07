@@ -1,3 +1,9 @@
+Information importantes : comme le fichier zip fait 511ko, nous ne pouvions pas tout upload sur le site.
+Par conséquent nous avons utilisé des liens directs  dropbox pour lire les fichiers (don't un dictionaire de 143'000 mots). À cause de cela, le programme ralenti un peu (peut-être est-ce pour télécharger ou accéder ?) lors de l'utilisation de la fonctionalité de tri pour la méthode brute de césar et xor.
+Nous avons essayer avec google drive sans succès car le programme bloque à <DOCTYPE> et nous ne pouvons lire le fichier directement.
+Donc dans les fonctions de test tout en bas dans Main.java et dans la fonction load() dans Decrypt.java, il y a la lecture de ces fichiers originales en commentaire, indiqué par !!! 
+
+
 Informations sur le fichier main :
 
 En haut : SHELL

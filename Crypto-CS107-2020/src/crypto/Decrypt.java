@@ -2,23 +2,20 @@ package crypto;
 
 import static crypto.Helper.bytesToString;
 
-
 import static crypto.Helper.cleanString;
 import static crypto.Helper.stringToBytes;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
-import com.sun.tools.javac.util.Context.Key;
 
 import java.io.BufferedReader;
 
 import java.io.FileInputStream; // Import the File class
 import java.io.IOException; // Import this class to handle errors
+import java.io.InputStream;
 import java.io.InputStreamReader; // Import this class to read text files
+import java.net.URL;
 
 
 
@@ -437,10 +434,13 @@ public class Decrypt {
 
 	//load - dictionary and store it into a hashtable
 
+	//wget http://cdn.cs50.net/2019/fall/psets/5/speller/speller/dictionaries/large
 	public static void load() {
 		try {
-			 FileInputStream dictionary = new FileInputStream("res/large"); //input the dictionary there
-		     BufferedReader  myReader = new BufferedReader(new InputStreamReader((dictionary)));
+//			FileInputStream dictionary = new FileInputStream("res/large"); //input the dictionary there (originally from local file)		!!! Use this if dictionary in local !!!
+//			BufferedReader  myReader = new BufferedReader(new InputStreamReader((dictionary)));
+			URL dictionary = new URL("https://dl.dropboxusercontent.com/s/mcjrgibzpdwey36/large?dl=0"); //direct link to my dropbox //couldn't find a way via google drive
+			BufferedReader  myReader = new BufferedReader(new InputStreamReader(dictionary.openStream()));
 
 		     String strLine;
 
@@ -459,6 +459,9 @@ public class Decrypt {
 
 		    	//find the hash of the word (call the hash function which then will return an integer/index number) - so we need to look at the first letter and give the index according to that
 		        int key = hash(tempWord);
+		        if(key < 0 || key > 676) {
+		        	System.out.println("Line is " + tempWord);
+		        }
 
 		        //load the table - 1) nothing 2) already a value in it
 	            if(table[key] == null){ //or  .next ? i'm not sure
@@ -471,7 +474,8 @@ public class Decrypt {
 	            }
 		     }
 
-		     dictionary.close();
+//		     dictionary.close();		!!! if dictionary in local	!!!
+//		     myReader.close();			!!! remove that if dictionary in local !!!
 		}catch (IOException e) {
 		      System.out.println("An error occurred.");
 		      e.printStackTrace();

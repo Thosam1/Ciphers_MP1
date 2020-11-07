@@ -184,7 +184,7 @@ public class Encrypt {
 				array1[i] = (byte) 32;
 			}			
 		}
-		return array1; // TODO: to be modified
+		return array1; 
 
 	}
 	//-----------------------Vigenere-------------------------
