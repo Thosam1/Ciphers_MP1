@@ -396,132 +396,7 @@ public class Decrypt {
 		return buffer;
 	}
 
-
-	//-----------------------Vigenere Brute Force -------------------------
-
-//	public static byte[] vigenereBruteForce(byte[] cipher) { //only return brute filtered, which means only lines with only letters (also store their respective keys)
-//		ArrayList<byte[]> possible = new ArrayList<byte[]>(); //contains only the possible lines
-//		int maxKeyLength = 12;
-//		int[] length = new int[maxKeyLength];
-//		int testingLength = 2;
-//		boolean finished = false;
-//
-//		byte[][] workingKeys = new byte[maxKeyLength][]; //we will add only keys that work
-//		for(int i = 2; i <= maxKeyLength; i++) { //we will test 26 -keys for each length : taking the same code as vigenere frequency and testing for everykey length
-//
-//			//create new cipher with only position i
-//			ArrayList<Byte>spaceRemoved = (ArrayList<Byte>) removeSpaces(cipher);
-//
-//			int remainder = spaceRemoved.size() % i; //number of iterations on the last, optional
-//			int multiple = spaceRemoved.size() / i; //number of iterations
-//			byte caesarTables[][] = new byte[i][multiple + 1]; //first dimension is the index of table, second dimension will be the characters of the table in order
-//			//you can say the second dim size is multiple + 1 (for remainder) since caesarWtihFrequencies will take care of spaces
-//
-//			for(int p = 0; p < multiple; p++) { //for multiple
-//				for(int q = 0; q < i; q++) {
-//					caesarTables[q][p] = spaceRemoved.get(p*i + q);
-//				}
-//			}
-//			for(int r = 0; r < remainder; r++){// for remainder
-//				caesarTables[r][multiple] = spaceRemoved.get(multiple * i + r);
-//			}
-//			for(int s = 0; s < i-remainder; s++) {//fill remainder with spaces
-//				caesarTables[s+remainder][multiple] = 32; //32 is space in byte
-//			}
-//
-//
-//			//so at the end we get n(keyLength) tableaux, perform caesar frequency on each of them to find the respective key, then add all together in a byte array.
-//			byte[][] bruteForceResult = new byte[256][];
-//			for(int s = 0; s < i; s++) {
-//				byte[] sub = new byte[caesarTables[s].length];
-//				for(int j = 0; j < caesarTables[s].length; j++) {
-//					sub[j] = caesarTables[s][j];
-//					System.out.println(caesarTables[s][j]);
-//				}
-//				bruteForceResult = caesarBruteForce(sub);
-//			}
-//		}
-//
-//		while(finished == false) {
-//
-//			byte[] temp = new byte[cipher.length];
-//			byte[] key = new byte[testingLength];	//code to test all possible keys for every possible length
-//
-//
-//			temp = Encrypt.vigenere(cipher, (byte[]) (key));		//testing out and adding if it only contains letter and spaces
-//			boolean feasable = true;
-//			for(int i = 0; i < temp.length; i++) {
-//				if((temp[i] != 32) && !(temp[i]>=97 && temp[i]<=122)) {
-//					feasable = false;
-//					break;
-//				}
-//			}
-//			if(feasable == true) {
-//				possible.add(temp);
-//			}
-//
-//			if(testingLength == 1) {
-//				finished = true;
-//				break;
-//			}
-//		}
-//
-//
-//
-//		int bestSolutionIndex = 0;
-//		int bestSolutionWords = 0;
-//		for(int i = 0; i < possible.size(); i++) {
-//			int n = foundInDictionary(possible.get(i));
-//			if(bestSolutionWords < n) {
-//				bestSolutionWords = n;
-//				bestSolutionIndex = i;
-//			}
-//		}
-//		return possible.get(bestSolutionIndex);
-//
-//	}
-//
-//
-	//-----------------------Otp Brute Force -------------------------
-
-
-	//-----------------------CBC Brute Force -------------------------
-
-//	public static byte[] cbcBruteForce(byte[] cipher) { //only return brute filtered, which means only lines with only letters (also store their respective keys)
-//		byte[] solution = {32, 43};
-//		final int keyLength = 5;
-//
-//		ArrayList<byte[]> possible = new ArrayList<byte[]>(); //contains only the possible lines
-//
-//		for(int i = 1; i <= keyLength; i++) {
-//			ArrayList<byte[]> possibleForLength = cbcBruteForceDecrypt(cipher, i); //adding all possible lines containing only letters in the "possibleForLength" arraylist (the loop goes over all possible keys until size keyLength)
-//			for(int j = 0; j < possibleForLength.size(); j++) {
-//				possible.add(possibleForLength.get(j)); //adding the values from possibleForLength to possible		//we could do all of that manually but it's cleaner to do it that way
-//			}
-//		}
-//
-//		//Call out dictionary method to count and select the line with most words included in the dictionary
-//		int maxWords = 0;
-//		int indexOfMaxWords = 0;
-//		for(int i = 0; i < possible.size(); i++){
-//			int currentMaxWords = foundInDictionary(possible.get(i));
-//			if( currentMaxWords > maxWords) {
-//				maxWords = currentMaxWords;
-//				indexOfMaxWords = i;
-//			}
-//		}
-//
-//
-//		return possible.get(indexOfMaxWords); //TODO: to be modified
-//	}
-//
-//	private static ArrayList<byte[]> cbcBruteForceDecrypt(byte[] plainText, int keyLength){ //prend le texte et la longueur de clé, filtre et retourne seulement les lignes avec que des lignes de l'alphabet and une arrayliste contenant des byte
-//			return null;
-//	}
-
-
-
-
+	
 	//-----------------------Importation and Storage of a dictionary in a hash table-------------------------
 
 
@@ -597,11 +472,10 @@ public class Decrypt {
 		     }
 
 		     dictionary.close();
-			return true;
 		}catch (IOException e) {
 		      System.out.println("An error occurred.");
 		      e.printStackTrace();
-		      return false;
+
 		    }
 	}
 

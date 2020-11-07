@@ -15,7 +15,7 @@ Nous avons mis les fonctions en commentaires pour les vérifiers, décommenter e
 		
 Plus bas, vous pouvez modifier le fichier lu et mieux comprendre le code.
 
-Dans chacung de ces codes, vous pouvez insérer un texte, le programme va le coder, ensuite le décoder en connaissant la clé, et également en ne connaissant pas la clé (césar et vigenere).
+Dans chacun de ces codes, vous pouvez insérer un texte, le programme va le coder, ensuite le décoder en connaissant la clé, et également en ne connaissant pas la clé (césar et vigenere).
 
 Bonus : 
 
