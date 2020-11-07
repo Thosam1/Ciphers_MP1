@@ -150,7 +150,6 @@ public class Encrypt {
 	 * @return an encoded byte array
 	 */
 	public static byte[] xor(byte[] plainText, byte key, boolean spaceEncoding) {
-		// TODO: COMPLETE THIS METHOD
 		byte[] array1 = new byte[plainText.length]; // we initialize a byte array of same length as plaintext, we will return it at the end
 		for(int i = 0; i < plainText.length; i++){
 			if(spaceEncoding == true){ //spaces are encoded if true
@@ -174,7 +173,6 @@ public class Encrypt {
 	 * @return an encoded byte array
 	 */
 	public static byte[] xor(byte[] plainText, byte key) {
-		// TODO: COMPLETE THIS METHOD
 		byte[] array1 = new byte[plainText.length]; // we initialize a byte array of same length as plaintext, we will return it at the end
 		for(int i = 0; i < plainText.length; i++){
 						
@@ -232,13 +230,13 @@ public class Encrypt {
 	 * @return an encoded byte array
 	 */
 	public static byte[] oneTimePad(byte[] plainText, byte[] pad) {
-		// TODO: COMPLETE THIS METHOD
+		
 		assert plainText.length <= pad.length : "Pad length is too short";
 		byte[] array1 = new byte[plainText.length]; // we initialize a byte array of same length as plaintext, we will return it at the end
 		for(int i = 0; i < plainText.length; i++){
 			array1[i] = (byte) (plainText[i] ^ pad[i]);	
 		}
-		return array1; // TODO: to be modified
+		return array1; 
 	}
 	
 	
@@ -253,7 +251,6 @@ public class Encrypt {
 	 * @return an encoded byte array
 	 */
 	public static byte[] cbc(byte[] plainText, byte[] iv) {
-		// TODO: COMPLETE THIS METHOD
 		byte[] encrypted = chooseCBC(plainText, iv, false);
 		return encrypted;
 
@@ -298,12 +295,12 @@ public class Encrypt {
 				}
 				
 							
-				return array1; // TODO: to be modified
+				return array1;
 		}
 	}
 	
 	public static byte[] encryptAdvancedCBC(byte[] plainText, byte[] iv, byte xor) {
-		// TODO: COMPLETE THIS METHOD
+		
 		byte[] encrypted = chooseAdvancedCBC(plainText, iv, xor, false);
 		return encrypted;
 
@@ -364,7 +361,7 @@ public class Encrypt {
 				}
 				
 							
-				return array1; // TODO: to be modified
+				return array1;
 		}
 	}
 		
@@ -378,12 +375,12 @@ public class Encrypt {
 	 * @return random bytes in an array
 	 */
 	public static byte[] generatePad(int size) {
-		// TODO: COMPLETE THIS METHOD
+	
 		byte[] pad_array = new byte[size];
 		for(int i = 0; i < size; i++){
 			pad_array[i] = (byte) rand.nextInt(256);
 		}
-		return pad_array; // TODO: to be modified
+		return pad_array; 
 
 
 	}
