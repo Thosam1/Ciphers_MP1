@@ -230,7 +230,7 @@ public class Main {
 //		checkOtp();
 //		checkCbc();
 //		checkChallenge();
-//		Shell();
+//		shell();
 
 
 	}
