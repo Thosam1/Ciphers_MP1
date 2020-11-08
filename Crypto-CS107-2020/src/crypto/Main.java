@@ -11,6 +11,13 @@ import java.util.Scanner;
 import static crypto.Encrypt.generatePad;
 import static crypto.Helper.bytesToString;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
+
 /*
  * Part 1: Encode (with note that one can reuse the functions to decode)
  * Part 2: bruteForceDecode (caesar, xor) and CBCDecode
@@ -21,7 +28,6 @@ public class Main {
 /**
 	 * This method takes care of the encryption part of the Shell
 	 * The method is interactive in that it prints certain strings and asks for inputs
-	 * nextLine isnt called once to prevent errors!
 	 * @param type the string value that will determine what type of encryption is going to be done
 	 * @param message the string input that is to be encrypted
 	 * @return string corresponding to encrypted message
@@ -85,13 +91,12 @@ public class Main {
 			String bruteOrFrequencies = scanner.nextLine();
 			if (bruteOrFrequencies.equals("0")) {
 				decodedCipherArray = Decrypt.caesarBruteForce(cipherByteArray);
-				System.out.println("To find the decrypted text, look for the lines with letters and words that make sense. " + System.lineSeparator()+"Here are the 256 possibilites:");
-				System.out.println("If you want, this program has an implemented dictionary which looks at the output of the Brute Force and returns the line that has the most words from the english language!!" + System.lineSeparator() + "If you would like to try out this cool method type 'Yes', and if you want to find your solution on your own with good old Brute Force, type anything else.");
+				System.out.println("If you want, this program has an implemented dictionary which looks at the output of the Brute Force" + System.lineSeparator()+"and returns the line that has the most words from the english language!!" + System.lineSeparator() + "If you would like to try out this cool method type 'Yes', and if you want to find your solution on your own with good old Brute Force, type anything else." + System.lineSeparator()+ "If you do select the dictionary, the result will be at the top of the BruteForce possibilities.");
 				String useDictionary = scanner.nextLine();
 				if (useDictionary.equals("Yes")) {
 					Decrypt.load(); //loads dictionary and turns it into a hash table
 					byte[] bruteLikely = Decrypt.bruteSolution(decodedCipherArray);
-					System.out.println("If I am not mistaken, I believe that this is the original message:" + System.lineSeparator() + bytesToString(bruteLikely));
+					System.out.println("If I am not mistaken, I believe that this is the original message:" + System.lineSeparator() + System.lineSeparator() + bytesToString(bruteLikely) +System.lineSeparator()); //adding a line makes it look neat
 					System.out.println("You can check for yourself:");
 			}
 				System.out.println("All you have to do is to look for the line that has letters and that makes sense. " + System.lineSeparator()+"Here are the 256 possibilities:");
@@ -113,12 +118,12 @@ public class Main {
 		else if (type.equals("2")) {
 			System.out.println("When it comes to the decryption of XOR there is one method: " + System.lineSeparator()+"Brute Force. " + System.lineSeparator()+"It consists in printing the 256 possibilities of encryption. " + System.lineSeparator()+"Then, it will be up to you to find the true meaning of your encrypted message.");
 			decodedCipherArray = Decrypt.xorBruteForce(cipherByteArray);
-			System.out.println("If you want, this program has an implemented dictionary which looks at the output of the Brute Force and returns the line that has the most words from the english language!!" + System.lineSeparator() + "If you would like to try out this cool method type 'Yes', and if you want to find your solution on your own with good old Brute Force, type anything else.");
+			System.out.println("If you want, this program has an implemented dictionary which looks at the output of the Brute Force" + System.lineSeparator()+"and returns the line that has the most words from the english language!!" + System.lineSeparator() + "If you would like to try out this cool method type 'Yes', and if you want to find your solution on your own with good old Brute Force, type anything else." + System.lineSeparator()+ "If you do select the dictionary, the result will be at the top of the BruteForce possibilities.");
 			String useDictionary = scanner.nextLine();
 			if (useDictionary.equals("Yes")) {
 				Decrypt.load();//loads dictionary and turns it into a hash table
 				byte[] bruteLikely = Decrypt.bruteSolution(decodedCipherArray);
-				System.out.println("If I am not mistaken, I believe that this is the original message:" + System.lineSeparator() + bytesToString(bruteLikely));
+				System.out.println("If I am not mistaken, I believe that this is the original message:" + System.lineSeparator() + System.lineSeparator() + bytesToString(bruteLikely) + System.lineSeparator()); // adding a line makes it look neat
 				System.out.println("You can check for yourself:");
 			}
 			System.out.println("All you have to do is to look for the line that has letters and that makes sense. " + System.lineSeparator()+"Here are the 256 possibilities:");
@@ -139,9 +144,7 @@ public class Main {
 	/**
 	 * This method asks the user if he would like to continue with the shell
 	 * the method asks for a Yes or No answer and loops until one of the two values is entered
-	 * nextLine isnt called once to prevent errors!
 	 *There is no need for parameters
-	 *
 	*/
 	public static boolean endOfShell() {
 		Scanner scanner = new Scanner(System.in);
@@ -165,11 +168,10 @@ public class Main {
 	 * The method prints certain strings and asks for inputs
 	 * Various methods are called by the shell which give it certain capacities
 	   such as encryption and decryption
-	 * nextLine isnt called once to prevent errors!
 	 * The method Shell does not take parameters and is of type void
 	*/
 	
-	public static void Shell(){
+	public static void shell(){
 		boolean isFinished = false;
 		Scanner scanner = new Scanner(System.in);
 		System.out.println("Hello! I am a program that has many capabilities when it comes to encryption and decryption.");
@@ -226,15 +228,21 @@ public class Main {
 
 	
 	//---------------------------MAIN---------------------------
-	public static void main(String args[]) {
+	public static void main(String args[]) throws MalformedURLException {
 		
-		checkCaesar();
+		
+		shell();
+		
+		
+		
+	//---------------------------Seulement à utiliser en important les fichiers manuellement---------------------------
+//		checkCaesar();
 //		checkVigenere();
 //		checkXor();
 //		checkOtp();
 //		checkCbc();
 //		checkChallenge();
-//		Shell();
+
 
 
 	}
@@ -248,12 +256,17 @@ public class Main {
 //	String al = "a"; -> min (97-122)
 //	String zl = "z";
 	
+//		Links :
+//		challenge-encrypted.txt :	https://dl.dropboxusercontent.com/s/8and8qautc0i0vo/challenge-encrypted.txt?dl=0
+//		text_one :	https://dl.dropboxusercontent.com/s/ore79wrwdg12p2v/text_one.txt?dl=0
+//		text_two :	https://dl.dropboxusercontent.com/s/hwfnmho8fomi1ws/text_two.txt?dl=0
+//		text_three :	https://dl.dropboxusercontent.com/s/ph60v9bed3aqgaz/text_three.txt?dl=0 
 	//-----------------------------------------------------------------------------------------------
 	
-	public static void checkChallenge() {
+	public static void checkChallenge() throws MalformedURLException {
 		System.out.println("Empty program for now... But it runs!");
-		byte[] challengeEncrypted = stringToBytes(Helper.readStringFromFile("challenge-"
-				+ "encrypted.txt"));
+		byte[] challengeEncrypted = stringToBytes(Helper.readStringFromFile("challenge-encrypted.txt"));
+				
         System.out.println(Arrays.toString(challengeEncrypted));
 		//Decoding without the key using frequency
 		String BD = bytesToString(Decrypt.vigenereWithFrequencies(challengeEncrypted));
@@ -462,24 +475,6 @@ public class Main {
 		
 	    
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 	
 	
 	

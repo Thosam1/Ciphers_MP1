@@ -1,7 +1,8 @@
 Information importantes : comme le fichier zip fait 511ko, nous ne pouvions pas tout upload sur le site.
 Par conséquent nous avons utilisé des liens directs  dropbox pour lire les fichiers (don't un dictionaire de 143'000 mots). À cause de cela, le programme ralenti un peu (peut-être est-ce pour télécharger ou accéder ?) lors de l'utilisation de la fonctionalité de tri pour la méthode brute de césar et xor.
 Nous avons essayer avec google drive sans succès car le programme bloque à <DOCTYPE> et nous ne pouvons lire le fichier directement.
-Donc dans les fonctions de test tout en bas dans Main.java et dans la fonction load() dans Decrypt.java, il y a la lecture de ces fichiers originales en commentaire, indiqué par !!! 
+Dans la fonction load() dans Decrypt.java, il y a la lecture de ces fichiers originales en commentaire, indiqué par !!! 
+Pour utiliser les fonctions tout en bas de main, veuillez important manuellement ces fichiers ou trouvez les en ligne
 
 		Links :
 		challenge-encrypted.txt :	https://dl.dropboxusercontent.com/s/8and8qautc0i0vo/challenge-encrypted.txt?dl=0
@@ -16,7 +17,7 @@ En haut : SHELL
 Dans la fonction Main :
 
 Nous avons mis les fonctions en commentaires pour les vérifiers, décommenter et lancer le programme.
-
+	!!!le projet faisait 105ko donc nous n'avons pas les fichiers challenge-encrypted.txt, text_one.txt, text_two.txt et text_three.txt
 		//		checkCaesar();
 		//		checkVigenere();
 		//		checkXor();
