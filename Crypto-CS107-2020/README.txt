@@ -16,7 +16,7 @@ En haut : SHELL
 Dans la fonction Main :
 
 Nous avons mis les fonctions en commentaires pour les vérifiers, décommenter et lancer le programme.
-
+		//              shell();
 		//		checkCaesar();
 		//		checkVigenere();
 		//		checkXor();
@@ -47,7 +47,7 @@ Bonus :
 		
 		chooseCBC (pour cbc normal) et chooseAdvancedCBC(pour cbc+xor) qui sont tous les deux dans le ficher Encrypt.java et prennent tous les deux une boolean false pour encrypter et true pour décrypter
 		
-2) Point important, dans le shell veuillez ne pas mettre d'espaces dans la clé. 
+2) Point important, dans le shell veuillez ne pas mettre d'espaces dans les pads. 
 	Dans le shell, pour le décryptage de césar et xor, il y a la possibilité de trier les 256 possibilités automatiquement. (ceci fonctionne meme si le message original contient des points d'exclamations, points virgules ou autres)
 
 3) Pour xor et caesar par force brute, dans les méthodes "testXor() et testCaesar()" qui se trouvent tous les deux après leur "check" respectives, nous avons mis en commentaire l'ajout du résultat dans un ficher créé dans le dossier /res
@@ -56,7 +56,7 @@ Bonus :
 	
 	Nous nous sommes dit que ce serait cool de pouvoir trier et sélectionner la bonne réponse parmis les possibilités de la méthode brute.
 	
-	Donc après beaucoup de recherche nous avons nous avons importé un dictionaire contenant plus de 143'000 mots dans le dossier /res.
+	Donc après beaucoup de recherche nous avons importé un dictionaire contenant plus de 143'000 mots dans le dossier /res.
 	
 	Nous avons pensé à comparer les possibilités selon le nombres de mots contenu dans le dictionaire. 
 	
@@ -68,8 +68,7 @@ Bonus :
 	
 	Donc tout fonctionne bien. !!! Attention à bien appeler la fonction load() (se situant dans Decrypt.java) avant d'utiliser bruteSolution() 
 	
-	À la base on voulait créer du code pour décrypter cbc, vigenere par méthode brut, mais on a réussi à trouver comment calculer le nombre de possibilité pour chaque longueur, mais pas comment itérer pour les 26^10 *25 + 26^9 *25 + 26^8 *25 + 26^7 25 + ... + 26^0 * 25;
-		
+	À la base on voulait créer du code pour décrypter cbc, vigenere par méthode brut, mais il aurait fallu faire tourner le programme pendant des années.
 		
 		
 		
