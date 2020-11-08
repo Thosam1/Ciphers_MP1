@@ -169,7 +169,7 @@ public class Main {
 	 * The method Shell does not take parameters and is of type void
 	*/
 	
-	public static void Shell(){
+	public static void shell(){
 		boolean isFinished = false;
 		Scanner scanner = new Scanner(System.in);
 		System.out.println("Hello! I am a program that has many capabilities when it comes to encryption and decryption.");
@@ -228,7 +228,7 @@ public class Main {
 	//---------------------------MAIN---------------------------
 	public static void main(String args[]) {
 		
-		checkCaesar();
+//		checkCaesar();
 //		checkVigenere();
 //		checkXor();
 //		checkOtp();
