@@ -230,17 +230,23 @@ public class Main {
 	//---------------------------MAIN---------------------------
 	public static void main(String args[]) throws MalformedURLException {
 		
+		SignaturesCheck.check();
+//		shell();
 		
-		shell();
 		
 		
+	//---------------------------Pour des tests individuels---------------------------
 		
-	//---------------------------Seulement à utiliser en important les fichiers manuellement---------------------------
 //		checkCaesar();
+//		
 //		checkVigenere();
+//		
 //		checkXor();
+//		
 //		checkOtp();
+//		
 //		checkCbc();
+//		
 //		checkChallenge();
 
 
@@ -271,6 +277,10 @@ public class Main {
 		//Decoding without the key using frequency
 		String BD = bytesToString(Decrypt.vigenereWithFrequencies(challengeEncrypted));
 		System.out.println("Decoded without knowing the key using frequency : " + BD);
+		
+		System.out.println();
+		System.out.println();
+	
 	}
 	
 	public static void checkCaesar() {
@@ -289,6 +299,9 @@ public class Main {
 		
 		System.out.println("------Caesar------");
 		testCaesar(messageBytes, keyBytes[0]);
+		
+		System.out.println();
+		System.out.println();
 	}
 	
 	//Run the Encoding and Decoding using the caesar pattern 
@@ -314,6 +327,7 @@ public class Main {
 		byte decodingKey = Decrypt.caesarWithFrequencies(result);
 		String sFD = bytesToString(Encrypt.caesar(result, decodingKey));
 		System.out.println("Decoded without knowing the key using frequency : " + sFD);
+		
 	}	
 	
 	//-----------------------------------------------------------------------------------------------
@@ -334,6 +348,9 @@ public class Main {
 		
 		System.out.println("------Vigenere------");
 		testVigenere(messageBytes, keyBytes); //test
+		
+		System.out.println();
+		System.out.println();
 	}
 	
 	public static void testVigenere(byte[] string , byte[] key) {
@@ -378,6 +395,9 @@ public class Main {
 		
 		System.out.println("------Xor------");
 		testXor(messageBytes, keyBytes[0]);
+		
+		System.out.println();
+		System.out.println();
 	}
 	
 	public static void testXor(byte[] string , byte key) {
@@ -418,6 +438,9 @@ public class Main {
 		
 		System.out.println("------OTP------");
 		testOtp(messageBytes, keyBytes);
+		
+		System.out.println();
+		System.out.println();
 	}
 	
 	
@@ -452,6 +475,9 @@ public class Main {
 		
 		System.out.println("------CBC------");
 		testCbc(messageBytes, keyBytes, xor);
+		
+		System.out.println();
+		System.out.println();
 	}
 	
 	public static void testCbc(byte[] string , byte[] key, byte xor) {
@@ -471,7 +497,7 @@ public class Main {
 		
 		//Decoding using advancedCbc
 		String tD = bytesToString(Decrypt.decryptAdvancedCBC(result2, (byte[]) (key), xor));
-		System.out.println("Decoded cbc knowing the key : " + tD);
+		System.out.println("Decoded advanced cbc knowing the key : " + tD);
 		
 	    
 	}

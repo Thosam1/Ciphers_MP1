@@ -231,7 +231,7 @@ public class Encrypt {
 	 */
 	public static byte[] oneTimePad(byte[] plainText, byte[] pad) {
 		
-		assert plainText.length <= pad.length : "Pad length is too short";
+		assert pad.length < plainText.length : "Pad length is too short";
 		byte[] array1 = new byte[plainText.length]; // we initialize a byte array of same length as plaintext, we will return it at the end
 		for(int i = 0; i < plainText.length; i++){
 			array1[i] = (byte) (plainText[i] ^ pad[i]);	

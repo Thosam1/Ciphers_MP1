@@ -2,18 +2,14 @@ Information importantes : comme le fichier zip fait 511ko, nous ne pouvions pas 
 Par conséquent nous avons utilisé des liens directs  dropbox pour lire les fichiers (don't un dictionaire de 143'000 mots). À cause de cela, le programme ralenti un peu (peut-être est-ce pour télécharger ou accéder ?) lors de l'utilisation de la fonctionalité de tri pour la méthode brute de césar et xor.
 Nous avons essayer avec google drive sans succès car le programme bloque à <DOCTYPE> et nous ne pouvons lire le fichier directement.
 Dans la fonction load() dans Decrypt.java, il y a la lecture de ces fichiers originales en commentaire, indiqué par !!! 
-Pour utiliser les fonctions tout en bas de main, veuillez important manuellement ces fichiers ou trouvez les en ligne
 
-		Links :
-		challenge-encrypted.txt :	https://dl.dropboxusercontent.com/s/8and8qautc0i0vo/challenge-encrypted.txt?dl=0
-		text_one :	https://dl.dropboxusercontent.com/s/ore79wrwdg12p2v/text_one.txt?dl=0
-		text_two :	https://dl.dropboxusercontent.com/s/hwfnmho8fomi1ws/text_two.txt?dl=0
-		text_three :	https://dl.dropboxusercontent.com/s/ph60v9bed3aqgaz/text_three.txt?dl=0 
 
 Informations sur le fichier main :
 
 En haut : SHELL
-!!! utiliser le dossier not dossier res pour acceder au bonus /res
+
+!!! utiliser le dossier res pour acceder utiliser les fonctions tests // dans main
+
 Dans la fonction Main :
 
 Nous avons mis les fonctions en commentaires pour les vérifiers, décommenter et lancer le programme.
