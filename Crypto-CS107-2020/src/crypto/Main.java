@@ -83,13 +83,12 @@ public class Main {
 			String bruteOrFrequencies = scanner.nextLine();
 			if (bruteOrFrequencies.equals("0")) {
 				decodedCipherArray = Decrypt.caesarBruteForce(cipherByteArray);
-				System.out.println("To find the decrypted text, look for the lines with letters and words that make sense. " + System.lineSeparator()+"Here are the 256 possibilites:");
-				System.out.println("If you want, this program has an implemented dictionary which looks at the output of the Brute Force and returns the line that has the most words from the english language!!" + System.lineSeparator() + "If you would like to try out this cool method type 'Yes', and if you want to find your solution on your own with good old Brute Force, type anything else.");
+				System.out.println("If you want, this program has an implemented dictionary which looks at the output of the Brute Force" + System.lineSeparator()+"and returns the line that has the most words from the english language!!" + System.lineSeparator() + "If you would like to try out this cool method type 'Yes', and if you want to find your solution on your own with good old Brute Force, type anything else." + System.lineSeparator()+ "If you do select the dictionary, the result will be at the top of the BruteForce possibilities.");
 				String useDictionary = scanner.nextLine();
 				if (useDictionary.equals("Yes")) {
 					Decrypt.load(); //loads dictionary and turns it into a hash table
 					byte[] bruteLikely = Decrypt.bruteSolution(decodedCipherArray);
-					System.out.println("If I am not mistaken, I believe that this is the original message:" + System.lineSeparator() + bytesToString(bruteLikely));
+					System.out.println("If I am not mistaken, I believe that this is the original message:" + System.lineSeparator() + System.lineSeparator() + bytesToString(bruteLikely) +System.lineSeparator()); //adding a line makes it look neat
 					System.out.println("You can check for yourself:");
 			}
 				System.out.println("All you have to do is to look for the line that has letters and that makes sense. " + System.lineSeparator()+"Here are the 256 possibilities:");
@@ -111,12 +110,12 @@ public class Main {
 		else if (type.equals("2")) {
 			System.out.println("When it comes to the decryption of XOR there is one method: " + System.lineSeparator()+"Brute Force. " + System.lineSeparator()+"It consists in printing the 256 possibilities of encryption. " + System.lineSeparator()+"Then, it will be up to you to find the true meaning of your encrypted message.");
 			decodedCipherArray = Decrypt.xorBruteForce(cipherByteArray);
-			System.out.println("If you want, this program has an implemented dictionary which looks at the output of the Brute Force and returns the line that has the most words from the english language!!" + System.lineSeparator() + "If you would like to try out this cool method type 'Yes', and if you want to find your solution on your own with good old Brute Force, type anything else.");
+			System.out.println("If you want, this program has an implemented dictionary which looks at the output of the Brute Force" + System.lineSeparator()+"and returns the line that has the most words from the english language!!" + System.lineSeparator() + "If you would like to try out this cool method type 'Yes', and if you want to find your solution on your own with good old Brute Force, type anything else." + System.lineSeparator()+ "If you do select the dictionary, the result will be at the top of the BruteForce possibilities.");
 			String useDictionary = scanner.nextLine();
 			if (useDictionary.equals("Yes")) {
 				Decrypt.load();//loads dictionary and turns it into a hash table
 				byte[] bruteLikely = Decrypt.bruteSolution(decodedCipherArray);
-				System.out.println("If I am not mistaken, I believe that this is the original message:" + System.lineSeparator() + bytesToString(bruteLikely));
+				System.out.println("If I am not mistaken, I believe that this is the original message:" + System.lineSeparator() + System.lineSeparator() + bytesToString(bruteLikely) + System.lineSeparator()); // adding a line makes it look neat
 				System.out.println("You can check for yourself:");
 			}
 			System.out.println("All you have to do is to look for the line that has letters and that makes sense. " + System.lineSeparator()+"Here are the 256 possibilities:");
@@ -138,7 +137,6 @@ public class Main {
 	 * This method asks the user if he would like to continue with the shell
 	 * the method asks for a Yes or No answer and loops until one of the two values is entered
 	 *There is no need for parameters
-	 *
 	*/
 	public static boolean endOfShell() {
 		Scanner scanner = new Scanner(System.in);
