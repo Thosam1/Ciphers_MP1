@@ -21,7 +21,6 @@ public class Main {
 /**
 	 * This method takes care of the encryption part of the Shell
 	 * The method is interactive in that it prints certain strings and asks for inputs
-	 * nextLine isnt called once to prevent errors!
 	 * @param type the string value that will determine what type of encryption is going to be done
 	 * @param message the string input that is to be encrypted
 	 * @return string corresponding to encrypted message
@@ -71,7 +70,6 @@ public class Main {
 	/**
 	 * This method takes care of the decryption part of the Shell
 	 * the method prints certain strings and asks for inputs
-	 * nextLine isnt called once to prevent errors!
 	 * @param type the string value that will determine what type of decryption is going to be done
 	 * @param cipher the string input that is
 	 * method is void
@@ -139,7 +137,6 @@ public class Main {
 	/**
 	 * This method asks the user if he would like to continue with the shell
 	 * the method asks for a Yes or No answer and loops until one of the two values is entered
-	 * nextLine isnt called once to prevent errors!
 	 *There is no need for parameters
 	 *
 	*/
@@ -165,7 +162,6 @@ public class Main {
 	 * The method prints certain strings and asks for inputs
 	 * Various methods are called by the shell which give it certain capacities
 	   such as encryption and decryption
-	 * nextLine isnt called once to prevent errors!
 	 * The method Shell does not take parameters and is of type void
 	*/
 	
