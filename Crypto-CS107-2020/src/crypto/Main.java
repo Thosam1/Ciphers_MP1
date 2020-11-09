@@ -94,7 +94,7 @@ public class Main {
 				System.out.println("If you want, this program has an implemented dictionary which looks at the output of the Brute Force" + System.lineSeparator()+"and returns the line that has the most words from the english language!!" + System.lineSeparator() + "If you would like to try out this cool method type 'Yes', and if you want to find your solution on your own with good old Brute Force, type anything else." + System.lineSeparator()+ "If you do select the dictionary, the result will be at the top of the BruteForce possibilities.");
 				String useDictionary = scanner.nextLine();
 				if (useDictionary.equals("Yes")) {
-					Decrypt.load(); //loads dictionary and turns it into a hash table
+//					Decrypt.load(); //loads dictionary and turns it into a hash table
 					byte[] bruteLikely = Decrypt.bruteSolution(decodedCipherArray);
 					System.out.println("If I am not mistaken, I believe that this is the original message:" + System.lineSeparator() + System.lineSeparator() + bytesToString(bruteLikely) +System.lineSeparator()); //adding a line makes it look neat
 					System.out.println("You can check for yourself:");
@@ -121,7 +121,7 @@ public class Main {
 			System.out.println("If you want, this program has an implemented dictionary which looks at the output of the Brute Force" + System.lineSeparator()+"and returns the line that has the most words from the english language!!" + System.lineSeparator() + "If you would like to try out this cool method type 'Yes', and if you want to find your solution on your own with good old Brute Force, type anything else." + System.lineSeparator()+ "If you do select the dictionary, the result will be at the top of the BruteForce possibilities.");
 			String useDictionary = scanner.nextLine();
 			if (useDictionary.equals("Yes")) {
-				Decrypt.load();//loads dictionary and turns it into a hash table
+//				Decrypt.load();//loads dictionary and turns it into a hash table
 				byte[] bruteLikely = Decrypt.bruteSolution(decodedCipherArray);
 				System.out.println("If I am not mistaken, I believe that this is the original message:" + System.lineSeparator() + System.lineSeparator() + bytesToString(bruteLikely) + System.lineSeparator()); // adding a line makes it look neat
 				System.out.println("You can check for yourself:");
@@ -174,6 +174,7 @@ public class Main {
 	public static void shell(){
 		boolean isFinished = false;
 		Scanner scanner = new Scanner(System.in);
+		Decrypt.load();//loads dictionary and turns it into a hash table
 		System.out.println("Hello! I am a program that has many capabilities when it comes to encryption and decryption.");
 		while (!(isFinished)) {
 			System.out.println("If you would like to encrypt a string, type 'E'. " + System.lineSeparator()+"However, if you would like to decrypt a string, type 'D'. " + System.lineSeparator()+"Finally, if you desire a precision about the types of encryptions and decryptions that this program can do, please type 'Help'.");
@@ -229,9 +230,8 @@ public class Main {
 	
 	//---------------------------MAIN---------------------------
 	public static void main(String args[]) throws MalformedURLException {
-		
-		SignaturesCheck.check();
-//		shell();
+
+		shell();
 		
 		
 		

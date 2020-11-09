@@ -1,8 +1,12 @@
 Information importantes : comme le fichier zip fait 511ko, nous ne pouvions pas tout upload sur le site.
-Par conséquent nous avons utilisé des liens directs  dropbox pour lire les fichiers (don't un dictionaire de 143'000 mots). À cause de cela, le programme ralenti un peu lors de l'utilisation de la fonctionalité de tri pour la méthode brute de césar et xor.
+Par conséquent nous avons utilisé des liens directs  dropbox pour lire le fichier dictionaire de 143'000 mots. 
+À cause de cela, le programme ralenti un peu lors de l'utilisation de la fonctionalité de tri pour la méthode brute de césar et xor. 
+Nous appelons par conséquent la fonction load() au début du shell pour éviter un ralentissement au milieu du programme.
+
 Nous avons essayer avec google drive sans succès car le programme bloque à <DOCTYPE> et nous ne pouvons lire le fichier directement.
-Dans la fonction load() dans Decrypt.java, il y a la lecture de ces fichiers originales en commentaire, indiqué par !!! 
-!!!le projet faisait 105ko donc nous n'avons pas les fichiers challenge-encrypted.txt, text_one.txt, text_two.txt et text_three.txt
+Dans la fonction load() dans Decrypt.java nous avons mis en commentaire la façon originale d'importer le dictionaire depuis le dossier res.
+
+Veuillez utiliser toutefois le dossier /res pour le bon fonctionnement des méthodes tout en bas de Main.java
 
 Informations sur le fichier Main :
 
@@ -46,7 +50,7 @@ Bonus :
 			et se trouve dans le ficher Decrypt.java
 		étant donné que pour cbc, l'encryptement et le déchiffrement sont très similaires, nous avons créé une fonction 
 		
-		chooseCBC (pour cbc normal) et chooseAdvancedCBC(pour cbc+xor) qui sont tous les deux dans le ficher Encrypt.java et prennent tous les deux une boolean false pour encrypter et true pour décrypter
+		chooseCBC (pour cbc normal) et chooseAdvancedCBC(pour cbc+xor) qui sont tous les deux dans le ficher Encrypt.java et prennent tous les deux une boolean false pour encrypter et une boolean true pour décrypter
 		
 2) Point important, dans le shell veuillez ne pas mettre d'espaces dans la clé. 
 	De plus, nous avons décidé de proposer à l'utilisateur d'entrer des chiffres entre 0 et 4 quand il s'agit de choisir s'il veut encrypter ou décrypter un message.
@@ -81,7 +85,7 @@ Bonus :
 	
 	Nous nous sommes dit que ce serait cool de pouvoir trier et sélectionner la bonne réponse parmis les possibilités de la méthode brute.
 	
-	Donc après beaucoup de recherche nous avons importé un dictionaire contenant plus de 143'000 mots dans le dossier /res.
+	Donc après beaucoup de recherche nous avons importé un dictionaire contenant plus de 143'000 mots dans le dossier /res (maintenant accessible à travers le lien : https://dl.dropboxusercontent.com/s/mcjrgibzpdwey36/large?dl=0	ou bien téléchargeable ici : http://cdn.cs50.net/2019/fall/psets/5/speller/speller/dictionaries/large)
 	
 	Nous avons pensé à comparer les possibilités selon le nombres de mots contenu dans le dictionaire. (finalement ce dossier prenait trop de place donc nous l'importons 	      d'internet)
 	
@@ -99,6 +103,32 @@ Ce que nous aurrions fait si nous avions eu plus de temps:
 	Nous avons eu l'idée de créer une mini-blockchain avec seulement quelques dizaines de blocs. L'idée était de nous servir de celle-ci pour encrypter des messages. 		Evidemment nous aurrions fait simple donc un bon ordinateur aurrait pu décrypter nos hash facilement. (Une difficulté d'environ 8 zéros, donc bien moins que les 		"grandes cryptos" comme le Bitcoin ou le Litcoin avec ses 450 000 zéros à résoudre!) Mais hypothétiquement, plus la chaine serait longue plus le déchiffrement 			serait difficile. 
 		Malheureusementpar faute de temps nous n'avons pu terminer ce projet à temps, mais nous poursuivrons probablement dans notre temps libre.
 	
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+			
 		
 		
 		
