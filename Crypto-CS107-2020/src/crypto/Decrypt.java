@@ -413,7 +413,7 @@ public class Decrypt {
 	}
 
 	public static ArrayList<byte[]> likelySolutions (byte[][] everything) { //job is to look over and return the lines where there are only letters and spaces
-		ArrayList<byte[]> possible = new ArrayList();		//only used for caesar and xor since already made
+		ArrayList<byte[]> possible = new ArrayList<byte[]>();		//only used for caesar and xor since already made
 		int size = everything.length;
 		int length = everything[0].length;
 		for(int i = 0; i < size; i++) {
