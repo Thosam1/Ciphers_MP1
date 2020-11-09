@@ -49,6 +49,8 @@ Bonus :
 		chooseCBC (pour cbc normal) et chooseAdvancedCBC(pour cbc+xor) qui sont tous les deux dans le ficher Encrypt.java et prennent tous les deux une boolean false pour encrypter et true pour décrypter
 		
 2) Point important, dans le shell veuillez ne pas mettre d'espaces dans la clé. 
+	De plus, nous avons décidé de proposer à l'utilisateur d'entrer des chiffres entre 0 et 4 quand il s'agit de choisir s'il veut encrypter ou décrypter un message.
+	Nous trouvons cela plus judicieux que des mots entiers tel que "Caesar" ou "One Time" car cela évite des erreurs qui pourraient survenir lorsque l'utilisateur fait 	une faute de frappe. (ex: "caesar" oubien "xor" au lieu de "XOR" etc.)
 	Dans le shell, pour le décryptage de césar et xor par Brute Force, il y a la possibilité de trier les 256 possibilités automatiquement. (ceci fonctionne meme si le message original contient des points d'exclamations, points virgules ou autres)
 	Le Shell permet d'encrypter un message en:
 		-Caesar
