@@ -16,14 +16,14 @@ Puis vous trouverez la méthode main et les méthodes de vérification
 
 Dans la fonction Main :
 
-Nous avons mis les fonctions de vérification en commentaire:
+Nous avons mis le shell et les fonctions de vérification en commentaire:
+		//		shell();
 		//		checkCaesar();
 		//		checkVigenere();
 		//		checkXor();
 		//		checkOtp();
 		//		checkCbc();
 		//		checkChallenge();
-		//		Shell();
 		
 Plus bas, vous pouvez modifier le fichier lu et mieux comprendre le code.
 
