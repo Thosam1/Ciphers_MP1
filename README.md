@@ -7,5 +7,5 @@ Implements some cool cryptographics stuff, such as CBC, Vigenere, Cesar as well 
 Thösam Norlha-Tsang - Aymeric de Chillaz 10/2020
 
 
-# Usage
+## Usage : 
 just run
