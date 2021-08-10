@@ -1,4 +1,5 @@
 # MiniProjet1
+# Ciphers
 
 This repository contains the first mini-project realized during first year bachelor at the EPFL.
 
