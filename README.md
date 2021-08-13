@@ -12,3 +12,7 @@ Thösam Norlha-Tsang - Aymeric de Chillaz 10/2020
 just run the class Main.java
 
 in the class Main.java you can comment shell() and test out the tests files if you wish :D.
+
+
+### made during first semester october-november 2020
+
